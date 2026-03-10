@@ -1,4 +1,52 @@
-let athletes = JSON.parse(localStorage.getItem("athletes")) || [];
+let athletes = JSON.parse(localStorage.getItem("athletes")) || [
+  {
+    name: "Riyad",
+    program: "Limitless Strength",
+    coach: "Karen",
+    sessions: [
+      {
+        date: "2026-03-01",
+        exercise: "Farmer Carry",
+        weight: "15",
+        reps: "",
+        sets: "2",
+        assistLevel: "Min verbal cues",
+        notes: "Improved posture and trunk control"
+      },
+      {
+        date: "2026-03-08",
+        exercise: "Trap Bar Deadlift",
+        weight: "35",
+        reps: "5",
+        sets: "3",
+        assistLevel: "Modeling + verbal cues",
+        notes: "Better setup than last week"
+      }
+    ]
+  },
+  {
+    name: "Evan",
+    program: "Teen Strength",
+    coach: "Susan",
+    sessions: [
+      {
+        date: "2026-03-03",
+        exercise: "Plank Hold",
+        weight: "",
+        reps: "",
+        sets: "3",
+        assistLevel: "Independent",
+        notes: "Held 20 seconds each round"
+      }
+    ]
+  },
+  {
+    name: "Mia",
+    program: "Limitless Strength",
+    coach: "Karen",
+    sessions: []
+  }
+];
 let selectedAthleteIndex = null;
 
 function saveToStorage() {
@@ -204,4 +252,5 @@ function wrapCSV(value) {
 
 document.getElementById("athleteSearch").addEventListener("input", function () {
   renderSearchResults(this.value);
+
 });
