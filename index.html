@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Athlete Progress Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Athlete Progress Tracker</h1>
+      <p class="subtitle">Search for an athlete, review recent progress, and enter today's metrics.</p>
+    </header>
+
+    <section class="search-section card">
+      <h2>Find Athlete</h2>
+      <div class="search-row">
+        <input
+          id="athleteSearch"
+          type="text"
+          placeholder="Start typing athlete name..."
+          autocomplete="off"
+        />
+        <button onclick="showAddAthleteForm()">Add New Athlete</button>
+        <button onclick="exportCSV()">Export CSV</button>
+      </div>
+      <div id="searchResults" class="search-results"></div>
+    </section>
+
+    <section id="addAthleteSection" class="card hidden">
+      <h2>Add Athlete</h2>
+      <div class="form-grid">
+        <input id="newAthleteName" type="text" placeholder="Athlete Name" />
+        <input id="newAthleteProgram" type="text" placeholder="Program / Class" />
+        <input id="newAthleteCoach" type="text" placeholder="Coach" />
+      </div>
+      <div class="button-row">
+        <button onclick="addAthlete()">Save Athlete</button>
+        <button class="secondary" onclick="hideAddAthleteForm()">Cancel</button>
+      </div>
+    </section>
+
+    <section id="athleteProfileSection" class="card hidden">
+      <div class="profile-header">
+        <div>
+          <h2 id="profileName">Athlete Name</h2>
+          <p id="profileMeta" class="profile-meta"></p>
+        </div>
+      </div>
+
+      <div class="profile-grid">
+        <div class="card inner-card">
+          <h3>Last Recorded Session</h3>
+          <div id="lastSessionSummary">No sessions recorded yet.</div>
+        </div>
+
+        <div class="card inner-card">
+          <h3>Add New Session</h3>
+          <div class="form-grid">
+            <input id="sessionDate" type="date" />
+            <input id="exerciseName" type="text" placeholder="Exercise / Metric" />
+            <input id="weight" type="number" placeholder="Weight" />
+            <input id="reps" type="number" placeholder="Reps" />
+            <input id="sets" type="number" placeholder="Sets" />
+            <input id="assistLevel" type="text" placeholder="Assist / Cueing Level" />
+          </div>
+          <textarea id="sessionNotes" placeholder="Notes"></textarea>
+          <div class="button-row">
+            <button onclick="saveSession()">Save Session</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card inner-card">
+        <h3>Session History</h3>
+        <table id="historyTable">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Exercise</th>
+              <th>Weight</th>
+              <th>Reps</th>
+              <th>Sets</th>
+              <th>Assist Level</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody id="historyBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
