@@ -105,6 +105,9 @@ async function loadClassRoster(classId) {
     `)
     .eq("class_id", classId);
 
+  console.log("Class roster query result:", data);
+  console.log("Class roster query error:", error);
+
   if (error) {
     console.error("Error loading class roster:", error);
     rosterDiv.innerHTML = `<div class="search-item">Could not load roster.</div>`;
@@ -117,7 +120,7 @@ async function loadClassRoster(classId) {
   }
 
   const sortedAthletes = data
-    .map((row) => row.athletes)
+    .map((row) => Array.isArray(row.athletes) ? row.athletes[0] : row.athletes)
     .filter(Boolean)
     .sort((a, b) => (a.name || "").localeCompare(b.name || ""));
 
@@ -135,6 +138,12 @@ async function loadClassRoster(classId) {
       }
 
       await openAthleteProfile(actualIndex);
+
+      // Optional: keep class roster visible, but clear search
+      const searchBox = document.getElementById("athleteSearch");
+      const resultsDiv = document.getElementById("searchResults");
+      searchBox.value = "";
+      resultsDiv.innerHTML = "";
     };
 
     rosterDiv.appendChild(div);
@@ -460,6 +469,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   await loadExercises();
   await loadClasses();
 });
+
 
 
 
