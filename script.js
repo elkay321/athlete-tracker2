@@ -308,7 +308,6 @@ document.getElementById("sessionNotes").value = "";
 const searchBox = document.getElementById("athleteSearch");
 searchBox.focus();
 }
-}
 
 // -----------------------------
 // EXPORT
@@ -371,6 +370,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   await loadAthletes();
   await loadExercises();
 });
+
 
 
 
