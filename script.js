@@ -153,16 +153,26 @@ async function renderSearchResults(searchTerm = "") {
     div.className = "search-item";
     div.textContent = `${athlete.name}${athlete.program ? " — " + athlete.program : ""}`;
 
-    div.onclick = async () => {
-      let actualIndex = athletes.findIndex((a) => a.id === athlete.id);
+div.onclick = async () => {
+  let actualIndex = athletes.findIndex((a) => a.id === athlete.id);
 
-      if (actualIndex === -1) {
-        athletes.push(athlete);
-        actualIndex = athletes.length - 1;
-      }
+  if (actualIndex === -1) {
+    athletes.push(athlete);
+    actualIndex = athletes.length - 1;
+  }
 
-      await openAthleteProfile(actualIndex);
-    };
+  await openAthleteProfile(actualIndex);
+
+  // Clear search box and results for next athlete
+  const searchBox = document.getElementById("athleteSearch");
+  const resultsDiv = document.getElementById("searchResults");
+
+  searchBox.value = "";
+  resultsDiv.innerHTML = "";
+
+  // Put cursor back in search box
+  searchBox.focus();
+};
 
     resultsDiv.appendChild(div);
   });
@@ -348,6 +358,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   await loadAthletes();
   await loadExercises();
 });
+
 
 
 
