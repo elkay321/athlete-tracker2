@@ -60,6 +60,91 @@ console.log("Exercises query error:", error);
   });
 }
 
+// -----------------------------
+// LOAD CLASSES
+// -----------------------------
+async function loadClasses() {
+  const { data, error } = await supabaseClient
+    .from("classes")
+    .select("*")
+    .eq("active", true)
+    .order("name", { ascending: true });
+
+  if (error) {
+    console.error("Error loading classes:", error);
+    return;
+  }
+
+  const classSelect = document.getElementById("classSelect");
+  classSelect.innerHTML = `<option value="">Select class</option>`;
+
+  (data || []).forEach((cls) => {
+    const option = document.createElement("option");
+    option.value = cls.id;
+    option.textContent = cls.name;
+    classSelect.appendChild(option);
+  });
+}
+
+async function loadClassRoster(classId) {
+  const rosterDiv = document.getElementById("classRoster");
+  rosterDiv.innerHTML = "";
+
+  if (!classId) return;
+
+  const { data, error } = await supabaseClient
+    .from("athlete_classes")
+    .select(`
+      athlete_id,
+      athletes (
+        id,
+        name,
+        program,
+        coach
+      )
+    `)
+    .eq("class_id", classId);
+
+  if (error) {
+    console.error("Error loading class roster:", error);
+    rosterDiv.innerHTML = `<div class="search-item">Could not load roster.</div>`;
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    rosterDiv.innerHTML = `<div class="search-item">No athletes assigned to this class.</div>`;
+    return;
+  }
+
+  const sortedAthletes = data
+    .map((row) => row.athletes)
+    .filter(Boolean)
+    .sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+
+  sortedAthletes.forEach((athlete) => {
+    const div = document.createElement("div");
+    div.className = "search-item";
+    div.textContent = `${athlete.name}${athlete.program ? " — " + athlete.program : ""}`;
+
+    div.onclick = async () => {
+      let actualIndex = athletes.findIndex((a) => a.id === athlete.id);
+
+      if (actualIndex === -1) {
+        athletes.push(athlete);
+        actualIndex = athletes.length - 1;
+      }
+
+      await openAthleteProfile(actualIndex);
+    };
+
+    rosterDiv.appendChild(div);
+  });
+}
+
+
+// -----------------------------
+// LOAD SESSIONS
+// -----------------------------
 async function loadSessionsForAthlete(athleteId) {
   const { data, error } = await supabaseClient
     .from("sessions")
@@ -370,6 +455,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   await loadAthletes();
   await loadExercises();
 });
+
 
 
 
