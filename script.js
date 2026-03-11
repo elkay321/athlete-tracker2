@@ -119,33 +119,51 @@ async function addAthlete() {
 
   await loadAthletes();
   hideAddAthleteForm();
-  renderSearchResults(name);
+  await renderSearchResults(name);
 }
 
-function renderSearchResults(searchTerm = "") {
+async function renderSearchResults(searchTerm = "") {
   const resultsDiv = document.getElementById("searchResults");
   resultsDiv.innerHTML = "";
 
-  const filtered = athletes.filter((athlete) =>
-    (athlete.name || "").toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  if (searchTerm.trim().length < 2) {
+    return;
+  }
 
-  if (filtered.length === 0 && searchTerm.trim() !== "") {
+  const { data, error } = await supabaseClient
+    .from("athletes")
+    .select("*")
+    .ilike("name", `%${searchTerm}%`)
+    .order("name", { ascending: true })
+    .limit(10);
+
+  if (error) {
+    console.error("Error searching athletes:", error);
+    resultsDiv.innerHTML = `<div class="search-item">Search error.</div>`;
+    return;
+  }
+
+  if (!data || data.length === 0) {
     resultsDiv.innerHTML = `<div class="search-item">No athlete found.</div>`;
     return;
   }
 
-  if (searchTerm.trim() === "") {
-    resultsDiv.innerHTML = "";
-    return;
-  }
-
-  filtered.forEach((athlete) => {
-    const actualIndex = athletes.findIndex((a) => a.id === athlete.id);
+  data.forEach((athlete) => {
     const div = document.createElement("div");
     div.className = "search-item";
     div.textContent = `${athlete.name}${athlete.program ? " — " + athlete.program : ""}`;
-    div.onclick = () => openAthleteProfile(actualIndex);
+
+    div.onclick = async () => {
+      let actualIndex = athletes.findIndex((a) => a.id === athlete.id);
+
+      if (actualIndex === -1) {
+        athletes.push(athlete);
+        actualIndex = athletes.length - 1;
+      }
+
+      await openAthleteProfile(actualIndex);
+    };
+
     resultsDiv.appendChild(div);
   });
 }
@@ -322,13 +340,14 @@ function wrapCSV(value) {
 // -----------------------------
 // EVENTS
 // -----------------------------
-document.getElementById("athleteSearch").addEventListener("input", function () {
-  renderSearchResults(this.value);
+document.getElementById("athleteSearch").addEventListener("input", async function () {
+  await renderSearchResults(this.value);
 });
 
 window.addEventListener("DOMContentLoaded", async () => {
   await loadAthletes();
   await loadExercises();
 });
+
 
 
