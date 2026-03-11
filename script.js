@@ -41,6 +41,9 @@ async function loadExercises() {
     .eq("active", true)
     .order("name", { ascending: true });
 
+console.log("Exercises query result:", data);
+console.log("Exercises query error:", error);  
+  
   if (error) {
     console.error("Error loading exercises:", error);
     return;
@@ -327,4 +330,5 @@ window.addEventListener("DOMContentLoaded", async () => {
   await loadAthletes();
   await loadExercises();
 });
+
 
