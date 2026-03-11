@@ -133,7 +133,7 @@ async function renderSearchResults(searchTerm = "") {
   const { data, error } = await supabaseClient
     .from("athletes")
     .select("*")
-    .ilike("name", `%${searchTerm}%`)
+    .ilike("name", `${searchTerm}%`)
     .order("name", { ascending: true })
     .limit(10);
 
@@ -348,6 +348,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   await loadAthletes();
   await loadExercises();
 });
+
 
 
 
