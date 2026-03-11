@@ -34,6 +34,29 @@ async function loadAthletes() {
   athletes = data || [];
 }
 
+async function loadExercises() {
+  const { data, error } = await supabaseClient
+    .from("exercises")
+    .select("*")
+    .eq("active", true)
+    .order("name", { ascending: true });
+
+  if (error) {
+    console.error("Error loading exercises:", error);
+    return;
+  }
+
+  const exerciseSelect = document.getElementById("exerciseName");
+  exerciseSelect.innerHTML = `<option value="">Select exercise</option>`;
+
+  (data || []).forEach((exercise) => {
+    const option = document.createElement("option");
+    option.value = exercise.name;
+    option.textContent = exercise.name;
+    exerciseSelect.appendChild(option);
+  });
+}
+
 async function loadSessionsForAthlete(athleteId) {
   const { data, error } = await supabaseClient
     .from("sessions")
@@ -302,4 +325,6 @@ document.getElementById("athleteSearch").addEventListener("input", function () {
 
 window.addEventListener("DOMContentLoaded", async () => {
   await loadAthletes();
+  await loadExercises();
 });
+
