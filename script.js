@@ -454,7 +454,9 @@ document.getElementById("athleteSearch").addEventListener("input", async functio
 window.addEventListener("DOMContentLoaded", async () => {
   await loadAthletes();
   await loadExercises();
+  await loadClasses();
 });
+
 
 
 
