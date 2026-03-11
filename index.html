@@ -7,6 +7,22 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
+<div id="authSection" class="card" style="max-width:420px;margin:40px auto;">
+  <h2>Coach Login</h2>
+
+  <input id="loginEmail" type="email" placeholder="Email" />
+
+  <input id="loginPassword" type="password" placeholder="Password" style="margin-top:10px;" />
+
+  <div class="button-row" style="margin-top:12px;">
+    <button onclick="signIn()">Sign In</button>
+  </div>
+
+  <p id="authMessage"></p>
+</div>
+
+<div id="appSection" style="display:none;">
   <div class="container">
     <header>
       <h1>Athlete Progress Tracker</h1>
@@ -105,13 +121,14 @@
       </div>
     </section>
   </div>
-
+</div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   
   <script src="script.js"></script>
 </body>
 
 </html>
+
 
 
 
