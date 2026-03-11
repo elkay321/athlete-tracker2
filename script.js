@@ -295,6 +295,19 @@ async function saveSession() {
   }
 
   await openAthleteProfile(selectedAthleteIndex);
+
+// Clear exercise fields for quick entry of next exercise
+document.getElementById("exerciseName").value = "";
+document.getElementById("weight").value = "";
+document.getElementById("reps").value = "";
+document.getElementById("sets").value = "";
+document.getElementById("assistLevel").value = "";
+document.getElementById("sessionNotes").value = "";
+
+// Return cursor to search box so coach can move to next athlete
+const searchBox = document.getElementById("athleteSearch");
+searchBox.focus();
+}
 }
 
 // -----------------------------
@@ -358,6 +371,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   await loadAthletes();
   await loadExercises();
 });
+
 
 
 
