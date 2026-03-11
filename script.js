@@ -451,11 +451,16 @@ document.getElementById("athleteSearch").addEventListener("input", async functio
   await renderSearchResults(this.value);
 });
 
+document.getElementById("classSelect").addEventListener("change", async function () {
+  await loadClassRoster(this.value);
+});
+
 window.addEventListener("DOMContentLoaded", async () => {
   await loadAthletes();
   await loadExercises();
   await loadClasses();
 });
+
 
 
 
