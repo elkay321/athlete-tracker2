@@ -61,6 +61,50 @@ console.log("Exercises query error:", error);
 }
 
 // -----------------------------
+// LOAD LAST EXERCISE SESSION
+// -----------------------------
+
+async function loadLastExerciseSession(exerciseName) {
+
+  if (selectedAthleteIndex === null) return;
+
+  const athlete = athletes[selectedAthleteIndex];
+  if (!athlete || !exerciseName) return;
+
+  const { data, error } = await supabaseClient
+    .from("sessions")
+    .select("*")
+    .eq("athlete_id", athlete.id)
+    .eq("exercise", exerciseName)
+    .order("session_date", { ascending: false })
+    .limit(1);
+
+  const summaryDiv = document.getElementById("lastSessionSummary");
+
+  if (error) {
+    console.error("Error loading exercise history:", error);
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    summaryDiv.innerHTML = `No previous record for ${exerciseName}.`;
+    return;
+  }
+
+  const session = data[0];
+
+  summaryDiv.innerHTML = `
+    <p><strong>Last ${exerciseName}</strong></p>
+    <p><strong>Date:</strong> ${session.session_date || "-"}</p>
+    <p><strong>Weight:</strong> ${session.weight || "-"}</p>
+    <p><strong>Reps:</strong> ${session.reps || "-"}</p>
+    <p><strong>Sets:</strong> ${session.sets || "-"}</p>
+    <p><strong>Assist Level:</strong> ${session.assist_level || "-"}</p>
+    <p><strong>Notes:</strong> ${session.notes || "-"}</p>
+  `;
+}
+
+// -----------------------------
 // LOAD CLASSES
 // -----------------------------
 async function loadClasses() {
@@ -86,6 +130,9 @@ async function loadClasses() {
   });
 }
 
+// -----------------------------
+// LOAD CLASS ROSTER
+// -----------------------------
 async function loadClassRoster(classId) {
   const rosterDiv = document.getElementById("classRoster");
   rosterDiv.innerHTML = "";
@@ -464,11 +511,16 @@ document.getElementById("classSelect").addEventListener("change", async function
   await loadClassRoster(this.value);
 });
 
+document.getElementById("exerciseName").addEventListener("change", async function () {
+  await loadLastExerciseSession(this.value);
+});
+
 window.addEventListener("DOMContentLoaded", async () => {
   await loadAthletes();
   await loadExercises();
   await loadClasses();
 });
+
 
 
 
