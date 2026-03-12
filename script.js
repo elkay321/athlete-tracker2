@@ -109,11 +109,12 @@ console.log("Exercises query error:", error);
   exerciseSelect.innerHTML = `<option value="">Select exercise</option>`;
 
   (data || []).forEach((exercise) => {
-    const option = document.createElement("option");
-    option.value = exercise.name;
-    option.textContent = exercise.name;
-    exerciseSelect.appendChild(option);
-  });
+  const option = document.createElement("option");
+  option.value = exercise.id;
+  option.textContent = exercise.name;
+  option.dataset.exerciseName = exercise.name;
+  exerciseSelect.appendChild(option);
+});
 }
 
 // -----------------------------
@@ -759,6 +760,7 @@ function cancelEdit() {
     block: "start"
   });
 }
+
 
 
 
