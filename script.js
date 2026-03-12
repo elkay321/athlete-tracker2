@@ -108,13 +108,50 @@ console.log("Exercises query error:", error);
   const exerciseSelect = document.getElementById("exerciseName");
   exerciseSelect.innerHTML = `<option value="">Select exercise</option>`;
 
-  (data || []).forEach((exercise) => {
+ (data || []).forEach((exercise) => {
   const option = document.createElement("option");
   option.value = exercise.id;
   option.textContent = exercise.name;
   option.dataset.exerciseName = exercise.name;
   exerciseSelect.appendChild(option);
 });
+}
+
+// -----------------------------
+// LOAD WEIGHT OPTIONS
+// -----------------------------
+
+async function loadWeightOptions(exerciseId, selectedWeight = "") {
+  const weightSelect = document.getElementById("weight");
+  weightSelect.innerHTML = `<option value="">Weight</option>`;
+
+  if (!exerciseId) return;
+
+  const { data, error } = await supabaseClient
+    .from("exercise_weight_options")
+    .select("*")
+    .eq("exercise_id", exerciseId)
+    .order("sort_order", { ascending: true });
+
+  console.log("Weight options query result:", data);
+  console.log("Weight options query error:", error);
+  console.log("Exercise ID used for weight lookup:", exerciseId);
+
+  if (error) {
+    console.error("Error loading weight options:", error);
+    return;
+  }
+
+  (data || []).forEach((row) => {
+    const option = document.createElement("option");
+    option.value = row.weight_value;
+    option.textContent = row.display_label || row.weight_value;
+    weightSelect.appendChild(option);
+  });
+
+  if (selectedWeight !== "" && selectedWeight !== null && selectedWeight !== undefined) {
+    weightSelect.value = String(selectedWeight);
+  }
 }
 
 // -----------------------------
@@ -663,7 +700,12 @@ document.getElementById("classSelect").addEventListener("change", async function
 });
 
 document.getElementById("exerciseName").addEventListener("change", async function () {
-  await loadLastExerciseSession(this.value);
+  const selectedOption = this.options[this.selectedIndex];
+  const exerciseId = this.value;
+  const exerciseName = selectedOption?.dataset?.exerciseName || "";
+
+  await loadWeightOptions(exerciseId);
+  await loadLastExerciseSession(exerciseName);
 });
 
 window.addEventListener("DOMContentLoaded", async () => {
@@ -760,6 +802,7 @@ function cancelEdit() {
     block: "start"
   });
 }
+
 
 
 
