@@ -538,6 +538,7 @@ async function saveSession() {
    const wasEditing = !!editingSessionId;
 
   editingSessionId = null;
+  document.getElementById("cancelEditBtn").style.display = "none";
 
   await openAthleteProfile(selectedAthleteIndex);
 
@@ -706,6 +707,8 @@ async function editSession(sessionId) {
 
   editingSessionId = session.id;
 
+  document.getElementById("cancelEditBtn").style.display = "inline-block";
+
   document.getElementById("sessionDate").value = session.session_date || "";
   document.getElementById("exerciseName").value = session.exercise || "";
   document.getElementById("weight").value = session.weight || "";
@@ -718,6 +721,29 @@ async function editSession(sessionId) {
     `Editing Session for ${athletes[selectedAthleteIndex].name}`;
 
   // Keep the user near the form
+  document.getElementById("sessionFormTitle").scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+}
+
+// Cancel edit functionality
+function cancelEdit() {
+
+  editingSessionId = null;
+
+  document.getElementById("sessionFormTitle").textContent =
+    `Add New Session for ${athletes[selectedAthleteIndex].name}`;
+
+  document.getElementById("exerciseName").value = "";
+  document.getElementById("weight").value = "";
+  document.getElementById("reps").value = "";
+  document.getElementById("sets").value = "";
+  document.getElementById("assistLevel").value = "";
+  document.getElementById("sessionNotes").value = "";
+
+  document.getElementById("cancelEditBtn").style.display = "none";
+
   document.getElementById("sessionFormTitle").scrollIntoView({
     behavior: "smooth",
     block: "start"
