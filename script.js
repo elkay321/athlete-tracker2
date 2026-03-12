@@ -386,7 +386,9 @@ async function openAthleteProfile(index) {
   document.getElementById("profileName").textContent = athlete.name;
   document.getElementById("profileMeta").textContent =
     `Program/Class: ${athlete.program || "Not entered"} | Coach: ${athlete.coach || "Not entered"}`;
-
+  
+  document.getElementById("sessionFormTitle").textContent = `Add New Session for ${athlete.name}`;
+  
   document.getElementById("athleteTriggers").value = athlete.triggers || "";
   
   renderLastSession();
@@ -606,6 +608,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     await loadClasses();
   }
 });
+
 
 
 
