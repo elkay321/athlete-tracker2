@@ -617,7 +617,45 @@ window.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
+// -----------------------------
+// EDIT AND DELETE FUNCTIONALITY
+// -----------------------------
 
+async function deleteSession(sessionId) {
+
+  const confirmDelete = confirm("Delete this session?");
+  if (!confirmDelete) return;
+
+  const { error } = await supabaseClient
+    .from("sessions")
+    .delete()
+    .eq("id", sessionId);
+
+  if (error) {
+    console.error("Delete error:", error);
+    alert("Could not delete session.");
+    return;
+  }
+
+  await openAthleteProfile(selectedAthleteIndex);
+}
+
+//EDIT
+
+async function editSession(sessionId) {
+
+  const session = selectedAthleteSessions.find(s => s.id === sessionId);
+  if (!session) return;
+
+  document.getElementById("sessionDate").value = session.session_date || "";
+  document.getElementById("exerciseName").value = session.exercise || "";
+  document.getElementById("weight").value = session.weight || "";
+  document.getElementById("reps").value = session.reps || "";
+  document.getElementById("sets").value = session.sets || "";
+  document.getElementById("assistLevel").value = session.assist_level || "";
+  document.getElementById("sessionNotes").value = session.notes || "";
+
+}
 
 
 
