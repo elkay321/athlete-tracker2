@@ -448,6 +448,14 @@ function renderHistory() {
         <td>${session.sets || ""}</td>
         <td>${session.assist_level || ""}</td>
         <td>${session.notes || ""}</td>
+    
+        <td>
+          <button onclick="editSession('${session.id}')">Edit</button>
+        </td>
+    
+        <td>
+          <button onclick="deleteSession('${session.id}')">Delete</button>
+        </td>
       </tr>
     `;
     historyBody.innerHTML += row;
@@ -608,6 +616,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     await loadClasses();
   }
 });
+
 
 
 
