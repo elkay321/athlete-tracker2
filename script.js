@@ -494,27 +494,10 @@ async function saveSession() {
 
   let error;
 
-if (editingSessionId) {
-  const result = await supabaseClient
-    .from("sessions")
-    .update({
-      athlete_id: athlete.id,
-      session_date: date || null,
-      exercise: exercise,
-      weight: weightRaw === "" ? null : Number(weightRaw),
-      reps: repsRaw === "" ? null : Number(repsRaw),
-      sets: setsRaw === "" ? null : Number(setsRaw),
-      assist_level: assistLevel || null,
-      notes: notes || null
-    })
-    .eq("id", editingSessionId);
-
-  error = result.error;
-} else {
-  const result = await supabaseClient
-    .from("sessions")
-    .insert([
-      {
+  if (editingSessionId) {
+    const result = await supabaseClient
+      .from("sessions")
+      .update({
         athlete_id: athlete.id,
         session_date: date || null,
         exercise: exercise,
@@ -523,11 +506,28 @@ if (editingSessionId) {
         sets: setsRaw === "" ? null : Number(setsRaw),
         assist_level: assistLevel || null,
         notes: notes || null
-      }
-    ]);
+      })
+      .eq("id", editingSessionId);
 
-  error = result.error;
-}
+    error = result.error;
+  } else {
+    const result = await supabaseClient
+      .from("sessions")
+      .insert([
+        {
+          athlete_id: athlete.id,
+          session_date: date || null,
+          exercise: exercise,
+          weight: weightRaw === "" ? null : Number(weightRaw),
+          reps: repsRaw === "" ? null : Number(repsRaw),
+          sets: setsRaw === "" ? null : Number(setsRaw),
+          assist_level: assistLevel || null,
+          notes: notes || null
+        }
+      ]);
+
+    error = result.error;
+  }
 
   if (error) {
     console.error("Error saving session:", error);
@@ -535,22 +535,35 @@ if (editingSessionId) {
     return;
   }
 
-  await openAthleteProfile(selectedAthleteIndex);
+  const wasEditing = !!editingSessionId;
 
   editingSessionId = null;
-document.getElementById("sessionFormTitle").textContent = `Add New Session for ${athletes[selectedAthleteIndex].name}`;
 
-// Clear exercise fields for quick entry of next exercise
-document.getElementById("exerciseName").value = "";
-document.getElementById("weight").value = "";
-document.getElementById("reps").value = "";
-document.getElementById("sets").value = "";
-document.getElementById("assistLevel").value = "";
-document.getElementById("sessionNotes").value = "";
+  await openAthleteProfile(selectedAthleteIndex);
 
-// Return cursor to search box so coach can move to next athlete
-const searchBox = document.getElementById("athleteSearch");
-searchBox.focus();
+  document.getElementById("sessionFormTitle").textContent =
+    `Add New Session for ${athletes[selectedAthleteIndex].name}`;
+
+  // Clear exercise fields for quick entry of next exercise
+  document.getElementById("exerciseName").value = "";
+  document.getElementById("weight").value = "";
+  document.getElementById("reps").value = "";
+  document.getElementById("sets").value = "";
+  document.getElementById("assistLevel").value = "";
+  document.getElementById("sessionNotes").value = "";
+
+  // After save, keep user near the history/form area instead of jumping to the top
+  if (wasEditing) {
+    document.getElementById("historyTable").scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  } else {
+    document.getElementById("sessionFormTitle").scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  }
 }
 
 // Trigger section
@@ -658,7 +671,6 @@ window.addEventListener("DOMContentLoaded", async () => {
 // -----------------------------
 
 async function deleteSession(sessionId) {
-
   const confirmDelete = confirm("Delete this session?");
   if (!confirmDelete) return;
 
@@ -673,9 +685,17 @@ async function deleteSession(sessionId) {
     return;
   }
 
-  await openAthleteProfile(selectedAthleteIndex);
   editingSessionId = null;
-document.getElementById("sessionFormTitle").textContent = `Add New Session for ${athletes[selectedAthleteIndex].name}`;
+
+  await openAthleteProfile(selectedAthleteIndex);
+
+  document.getElementById("sessionFormTitle").textContent =
+    `Add New Session for ${athletes[selectedAthleteIndex].name}`;
+
+  document.getElementById("historyTable").scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
 }
 
 //EDIT
@@ -694,8 +714,16 @@ async function editSession(sessionId) {
   document.getElementById("assistLevel").value = session.assist_level || "";
   document.getElementById("sessionNotes").value = session.notes || "";
 
-  document.getElementById("sessionFormTitle").textContent = `Editing Session for ${athletes[selectedAthleteIndex].name}`;
+  document.getElementById("sessionFormTitle").textContent =
+    `Editing Session for ${athletes[selectedAthleteIndex].name}`;
+
+  // Keep the user near the form
+  document.getElementById("sessionFormTitle").scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
 }
+
 
 
 
