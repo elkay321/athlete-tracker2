@@ -492,7 +492,26 @@ async function saveSession() {
 
   if (exercise === "") return;
 
-  const { error } = await supabaseClient
+  let error;
+
+if (editingSessionId) {
+  const result = await supabaseClient
+    .from("sessions")
+    .update({
+      athlete_id: athlete.id,
+      session_date: date || null,
+      exercise: exercise,
+      weight: weightRaw === "" ? null : Number(weightRaw),
+      reps: repsRaw === "" ? null : Number(repsRaw),
+      sets: setsRaw === "" ? null : Number(setsRaw),
+      assist_level: assistLevel || null,
+      notes: notes || null
+    })
+    .eq("id", editingSessionId);
+
+  error = result.error;
+} else {
+  const result = await supabaseClient
     .from("sessions")
     .insert([
       {
@@ -507,6 +526,9 @@ async function saveSession() {
       }
     ]);
 
+  error = result.error;
+}
+
   if (error) {
     console.error("Error saving session:", error);
     alert("There was a problem saving the session.");
@@ -514,6 +536,9 @@ async function saveSession() {
   }
 
   await openAthleteProfile(selectedAthleteIndex);
+
+  editingSessionId = null;
+document.getElementById("sessionFormTitle").textContent = `Add New Session for ${athletes[selectedAthleteIndex].name}`;
 
 // Clear exercise fields for quick entry of next exercise
 document.getElementById("exerciseName").value = "";
@@ -649,14 +674,17 @@ async function deleteSession(sessionId) {
   }
 
   await openAthleteProfile(selectedAthleteIndex);
+  editingSessionId = null;
+document.getElementById("sessionFormTitle").textContent = `Add New Session for ${athletes[selectedAthleteIndex].name}`;
 }
 
 //EDIT
 
 async function editSession(sessionId) {
-
   const session = selectedAthleteSessions.find(s => s.id === sessionId);
   if (!session) return;
+
+  editingSessionId = session.id;
 
   document.getElementById("sessionDate").value = session.session_date || "";
   document.getElementById("exerciseName").value = session.exercise || "";
@@ -666,7 +694,9 @@ async function editSession(sessionId) {
   document.getElementById("assistLevel").value = session.assist_level || "";
   document.getElementById("sessionNotes").value = session.notes || "";
 
+  document.getElementById("sessionFormTitle").textContent = `Editing Session for ${athletes[selectedAthleteIndex].name}`;
 }
+
 
 
 
