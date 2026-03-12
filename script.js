@@ -426,39 +426,49 @@ function renderLastSession() {
 }
 
 function renderHistory() {
+
   const historyBody = document.getElementById("historyBody");
   historyBody.innerHTML = "";
 
   if (!selectedAthleteSessions || selectedAthleteSessions.length === 0) {
     historyBody.innerHTML = `
       <tr>
-        <td colspan="7">No session history yet.</td>
+        <td colspan="9">No session history yet.</td>
       </tr>
     `;
     return;
   }
 
   selectedAthleteSessions.forEach((session) => {
-    const row = `
-      <tr>
-        <td>${session.session_date || ""}</td>
-        <td>${session.exercise || ""}</td>
-        <td>${session.weight || ""}</td>
-        <td>${session.reps || ""}</td>
-        <td>${session.sets || ""}</td>
-        <td>${session.assist_level || ""}</td>
-        <td>${session.notes || ""}</td>
-    
-        <td>
-          <button onclick="editSession('${session.id}')">Edit</button>
-        </td>
-    
-        <td>
-          <button onclick="deleteSession('${session.id}')">Delete</button>
-        </td>
-      </tr>
+
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+      <td>${session.session_date || ""}</td>
+      <td>${session.exercise || ""}</td>
+      <td>${session.weight || ""}</td>
+      <td>${session.reps || ""}</td>
+      <td>${session.sets || ""}</td>
+      <td>${session.assist_level || ""}</td>
+      <td>${session.notes || ""}</td>
+
+      <td><button class="edit-session-btn">Edit</button></td>
+      <td><button class="delete-session-btn">Delete</button></td>
     `;
-    historyBody.innerHTML += row;
+
+    const editButton = row.querySelector(".edit-session-btn");
+    const deleteButton = row.querySelector(".delete-session-btn");
+
+    editButton.addEventListener("click", async () => {
+      await editSession(session.id);
+    });
+
+    deleteButton.addEventListener("click", async () => {
+      await deleteSession(session.id);
+    });
+
+    historyBody.appendChild(row);
+
   });
 }
 
@@ -656,6 +666,7 @@ async function editSession(sessionId) {
   document.getElementById("sessionNotes").value = session.notes || "";
 
 }
+
 
 
 
