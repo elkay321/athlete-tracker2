@@ -391,6 +391,8 @@ async function openAthleteProfile(index) {
   document.getElementById("sessionFormTitle").textContent = `Add New Session for ${athlete.name}`;
   
   document.getElementById("athleteTriggers").value = athlete.triggers || "";
+  document.getElementById("athletePreferences").value = athlete.preferences || "";
+  document.getElementById("athleteCommunicationStyle").value = athlete.communication_style || "";
   
   renderLastSession();
   renderHistory();
@@ -568,26 +570,34 @@ async function saveSession() {
 }
 
 // Trigger section
-async function saveTriggers() {
+async function saveAthleteProfileNotes() {
   if (selectedAthleteIndex === null) return;
 
   const athlete = athletes[selectedAthleteIndex];
   if (!athlete) return;
 
   const triggers = document.getElementById("athleteTriggers").value.trim();
+  const preferences = document.getElementById("athletePreferences").value.trim();
+  const communicationStyle = document.getElementById("athleteCommunicationStyle").value.trim();
 
   const { error } = await supabaseClient
     .from("athletes")
-    .update({ triggers: triggers || null })
+    .update({
+      triggers: triggers || null,
+      preferences: preferences || null,
+      communication_style: communicationStyle || null
+    })
     .eq("id", athlete.id);
 
   if (error) {
-    console.error("Error saving triggers:", error);
-    alert("There was a problem saving triggers.");
+    console.error("Error saving athlete support profile:", error);
+    alert("There was a problem saving the support profile.");
     return;
   }
 
   athletes[selectedAthleteIndex].triggers = triggers || null;
+  athletes[selectedAthleteIndex].preferences = preferences || null;
+  athletes[selectedAthleteIndex].communication_style = communicationStyle || null;
 }
 
 // -----------------------------
@@ -749,6 +759,7 @@ function cancelEdit() {
     block: "start"
   });
 }
+
 
 
 
