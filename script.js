@@ -387,6 +387,8 @@ async function openAthleteProfile(index) {
   document.getElementById("profileMeta").textContent =
     `Program/Class: ${athlete.program || "Not entered"} | Coach: ${athlete.coach || "Not entered"}`;
 
+  document.getElementById("athleteTriggers").value = athlete.triggers || "";
+  
   renderLastSession();
   renderHistory();
 
@@ -505,6 +507,29 @@ const searchBox = document.getElementById("athleteSearch");
 searchBox.focus();
 }
 
+// Trigger section
+async function saveTriggers() {
+  if (selectedAthleteIndex === null) return;
+
+  const athlete = athletes[selectedAthleteIndex];
+  if (!athlete) return;
+
+  const triggers = document.getElementById("athleteTriggers").value.trim();
+
+  const { error } = await supabaseClient
+    .from("athletes")
+    .update({ triggers: triggers || null })
+    .eq("id", athlete.id);
+
+  if (error) {
+    console.error("Error saving triggers:", error);
+    alert("There was a problem saving triggers.");
+    return;
+  }
+
+  athletes[selectedAthleteIndex].triggers = triggers || null;
+}
+
 // -----------------------------
 // EXPORT
 // -----------------------------
@@ -581,6 +606,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     await loadClasses();
   }
 });
+
 
 
 
