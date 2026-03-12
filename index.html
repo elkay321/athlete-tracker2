@@ -79,10 +79,27 @@
 </div>
 
 <div class="card inner-card">
-  <h3>Triggers</h3>
-  <textarea id="athleteTriggers" placeholder="Enter triggers or important notes for this athlete"></textarea>
+  <h3>Athlete Support Profile</h3>
+
+  <div class="support-profile-grid">
+    <div>
+      <label for="athleteTriggers"><strong>Triggers</strong></label>
+      <textarea id="athleteTriggers" placeholder="Enter triggers or important notes for this athlete"></textarea>
+    </div>
+
+    <div>
+      <label for="athletePreferences"><strong>Preferences</strong></label>
+      <textarea id="athletePreferences" placeholder="Enter preferences"></textarea>
+    </div>
+
+    <div>
+      <label for="athleteCommunicationStyle"><strong>Communication Style</strong></label>
+      <textarea id="athleteCommunicationStyle" placeholder="Enter communication style"></textarea>
+    </div>
+  </div>
+
   <div class="button-row" style="margin-top: 10px;">
-    <button onclick="saveTriggers()">Save Triggers</button>
+    <button onclick="saveAthleteProfileNotes()">Save Support Profile</button>
   </div>
 </div>
       
@@ -140,6 +157,7 @@
 </body>
 
 </html>
+
 
 
 
