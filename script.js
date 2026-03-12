@@ -571,10 +571,17 @@ document.getElementById("exerciseName").addEventListener("change", async functio
 });
 
 window.addEventListener("DOMContentLoaded", async () => {
-  await loadAthletes();
-  await loadExercises();
-  await loadClasses();
+  await checkAuth();
+
+  const { data } = await supabaseClient.auth.getUser();
+
+  if (data && data.user) {
+    await loadAthletes();
+    await loadExercises();
+    await loadClasses();
+  }
 });
+
 
 
 
