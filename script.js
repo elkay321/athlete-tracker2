@@ -9,6 +9,61 @@ const supabaseClient = window.supabase.createClient(
   SUPABASE_ANON_KEY
 );
 
+async function checkAuth() {
+  const { data, error } = await supabaseClient.auth.getUser();
+
+  if (error) {
+    console.error("Auth check error:", error);
+    showLoggedOut();
+    return;
+  }
+
+  if (data && data.user) {
+    showLoggedIn();
+  } else {
+    showLoggedOut();
+  }
+}
+
+function showLoggedIn() {
+  document.getElementById("authSection").style.display = "none";
+  document.getElementById("appSection").style.display = "block";
+}
+
+function showLoggedOut() {
+  document.getElementById("authSection").style.display = "block";
+  document.getElementById("appSection").style.display = "none";
+}
+
+async function signIn() {
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPassword").value;
+  const authMessage = document.getElementById("authMessage");
+
+  authMessage.textContent = "";
+
+  const { error } = await supabaseClient.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (error) {
+    console.error("Sign in error:", error);
+    authMessage.textContent = error.message;
+    return;
+  }
+
+  await checkAuth();
+  await loadAthletes();
+  await loadExercises();
+  await loadClasses();
+}
+
+async function signOut() {
+  await supabaseClient.auth.signOut();
+  showLoggedOut();
+}
+
 // -----------------------------
 // GLOBAL STATE
 // -----------------------------
@@ -520,6 +575,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   await loadExercises();
   await loadClasses();
 });
+
 
 
 
