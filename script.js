@@ -70,6 +70,7 @@ async function signOut() {
 let athletes = [];
 let selectedAthleteIndex = null;
 let selectedAthleteSessions = [];
+let editingSessionId = null;
 
 // -----------------------------
 // LOAD ATHLETES FROM DATABASE
@@ -666,6 +667,7 @@ async function editSession(sessionId) {
   document.getElementById("sessionNotes").value = session.notes || "";
 
 }
+
 
 
 
