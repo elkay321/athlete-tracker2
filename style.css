@@ -146,3 +146,19 @@ td {
   z-index: 10;
   border-bottom: 1px solid #ddd;
 }
+
+.support-profile-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.support-profile-grid textarea {
+  min-height: 120px;
+}
+
+@media (max-width: 900px) {
+  .support-profile-grid {
+    grid-template-columns: 1fr;
+  }
+}
