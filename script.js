@@ -142,12 +142,19 @@ async function loadWeightOptions(exerciseId, selectedWeight = "") {
     return;
   }
 
-  (data || []).forEach((row) => {
-    const option = document.createElement("option");
-    option.value = row.weight_value;
-    option.textContent = row.display_label || row.weight_value;
-    weightSelect.appendChild(option);
-  });
+  const seen = new Set();
+
+(data || []).forEach((row) => {
+  const key = `${row.weight_value}-${row.display_label || ""}`;
+
+  if (seen.has(key)) return;
+  seen.add(key);
+
+  const option = document.createElement("option");
+  option.value = row.weight_value;
+  option.textContent = row.display_label || row.weight_value;
+  weightSelect.appendChild(option);
+});
 
   if (selectedWeight !== "" && selectedWeight !== null && selectedWeight !== undefined) {
     weightSelect.value = String(selectedWeight);
@@ -802,6 +809,7 @@ function cancelEdit() {
     block: "start"
   });
 }
+
 
 
 
