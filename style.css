@@ -157,8 +157,19 @@ td {
   min-height: 120px;
 }
 
+.sticky-session-form {
+  position: sticky;
+  top: 90px;
+  align-self: start;
+}
+
 @media (max-width: 900px) {
   .support-profile-grid {
     grid-template-columns: 1fr;
+  }
+
+  .sticky-session-form {
+    position: static;
+    top: auto;
   }
 }
