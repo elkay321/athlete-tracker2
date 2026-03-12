@@ -113,6 +113,7 @@ console.log("Exercises query error:", error);
   option.value = exercise.id;
   option.textContent = exercise.name;
   option.dataset.exerciseName = exercise.name;
+  option.dataset.metricType = exercise.metric_type || "";
   exerciseSelect.appendChild(option);
 });
 }
@@ -159,6 +160,94 @@ async function loadWeightOptions(exerciseId, selectedWeight = "") {
   if (selectedWeight !== "" && selectedWeight !== null && selectedWeight !== undefined) {
     weightSelect.value = String(selectedWeight);
   }
+}
+
+// -----------------------------
+// DYNAMIC METRIC FUNCTIONS
+// -----------------------------
+
+function formatPrimaryMetric(session) {
+  const metricType = session.primary_metric_type || "";
+
+  if (metricType === "weight") {
+    const value = session.primary_metric_value || session.weight || "";
+    return value ? `${value} lb` : "";
+  }
+
+  if (metricType === "seconds") {
+    return session.primary_metric_value ? `${session.primary_metric_value} sec` : "";
+  }
+
+  if (metricType === "minutes") {
+    return session.primary_metric_value ? `${session.primary_metric_value} min` : "";
+  }
+
+  if (metricType === "percent") {
+    return session.primary_metric_value ? `${session.primary_metric_value}%` : "";
+  }
+
+  if (metricType === "level") {
+    return session.primary_metric_value || "";
+  }
+
+  // For older rows without primary_metric fields
+  if (session.weight) {
+    return `${session.weight} lb`;
+  }
+
+  return "";
+}
+
+async function configureMetricField(metricType, exerciseId = "", selectedValue = "") {
+  const weightSelect = document.getElementById("weight");
+  const metricValueNumber = document.getElementById("metricValueNumber");
+  const metricValueText = document.getElementById("metricValueText");
+
+  // Hide everything first
+  weightSelect.style.display = "none";
+  metricValueNumber.style.display = "none";
+  metricValueText.style.display = "none";
+
+  // Clear old values
+  metricValueNumber.value = "";
+  metricValueText.value = "";
+
+  if (metricType === "weight") {
+    weightSelect.style.display = "block";
+    await loadWeightOptions(exerciseId, selectedValue);
+    return;
+  }
+
+  if (metricType === "seconds") {
+    metricValueNumber.style.display = "block";
+    metricValueNumber.placeholder = "Seconds";
+    metricValueNumber.value = selectedValue || "";
+    return;
+  }
+
+  if (metricType === "minutes") {
+    metricValueNumber.style.display = "block";
+    metricValueNumber.placeholder = "Minutes";
+    metricValueNumber.value = selectedValue || "";
+    return;
+  }
+
+  if (metricType === "percent") {
+    metricValueNumber.style.display = "block";
+    metricValueNumber.placeholder = "Percent";
+    metricValueNumber.value = selectedValue || "";
+    return;
+  }
+
+  if (metricType === "level") {
+    metricValueText.style.display = "block";
+    metricValueText.placeholder = "Level (e.g. wall, box, ground or 4 in, 6 in)";
+    metricValueText.value = selectedValue || "";
+    return;
+  }
+
+  // reps or anything else:
+  // no primary metric field needed
 }
 
 // -----------------------------
@@ -708,10 +797,13 @@ document.getElementById("classSelect").addEventListener("change", async function
 
 document.getElementById("exerciseName").addEventListener("change", async function () {
   const selectedOption = this.options[this.selectedIndex];
+
   const exerciseId = this.value;
   const exerciseName = selectedOption?.dataset?.exerciseName || "";
+  const metricType = selectedOption?.dataset?.metricType || "";
 
-  await loadWeightOptions(exerciseId);
+  await configureMetricField(metricType, exerciseId);
+
   await loadLastExerciseSession(exerciseName);
 });
 
@@ -809,6 +901,7 @@ function cancelEdit() {
     block: "start"
   });
 }
+
 
 
 
