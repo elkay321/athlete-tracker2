@@ -535,7 +535,7 @@ async function saveSession() {
     return;
   }
 
-  const wasEditing = !!editingSessionId;
+   const wasEditing = !!editingSessionId;
 
   editingSessionId = null;
 
@@ -552,7 +552,7 @@ async function saveSession() {
   document.getElementById("assistLevel").value = "";
   document.getElementById("sessionNotes").value = "";
 
-  // After save, keep user near the history/form area instead of jumping to the top
+  // Keep user near the relevant section
   if (wasEditing) {
     document.getElementById("historyTable").scrollIntoView({
       behavior: "smooth",
@@ -723,6 +723,7 @@ async function editSession(sessionId) {
     block: "start"
   });
 }
+
 
 
 
