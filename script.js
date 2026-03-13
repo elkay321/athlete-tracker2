@@ -577,24 +577,29 @@ async function openAthleteProfile(index) {
   renderLastSession();
   renderHistory();
 
-  const today = new Date().toISOString().split("T")[0];
-  document.getElementById("sessionDate").value = today;
+const today = new Date().toISOString().split("T")[0];
+document.getElementById("sessionDate").value = today;
 document.getElementById("exerciseName").value = "";
 
 // Reset weight dropdown
 document.getElementById("weight").innerHTML = `<option value="">Weight</option>`;
 document.getElementById("weight").style.display = "none";
+document.getElementById("weightFieldWrapper").classList.add("field-hidden");
 
 // Reset dynamic metric fields
 document.getElementById("metricValueNumber").value = "";
 document.getElementById("metricValueNumber").style.display = "none";
+document.getElementById("metricValueNumberWrapper").classList.add("field-hidden");
 
 document.getElementById("metricValueText").value = "";
 document.getElementById("metricValueText").style.display = "none";
+document.getElementById("metricValueTextWrapper").classList.add("field-hidden");
 
 // Reset remaining fields
 document.getElementById("reps").value = "";
 document.getElementById("sets").value = "";
+document.getElementById("repsFieldWrapper").classList.add("field-hidden");
+document.getElementById("setsFieldWrapper").classList.add("field-hidden");
 document.getElementById("assistLevel").value = "";
 document.getElementById("sessionNotes").value = "";
 }
@@ -924,7 +929,6 @@ document.getElementById("exerciseName").addEventListener("change", async functio
   const metricType = selectedOption?.dataset?.metricType || "";
 
   await configureMetricField(metricType, exerciseId);
-
   await loadLastExerciseSession(exerciseName);
 });
 
@@ -1039,6 +1043,7 @@ function cancelEdit() {
     block: "start"
   });
 }
+
 
 
 
