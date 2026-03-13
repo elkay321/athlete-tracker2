@@ -635,15 +635,14 @@ function renderLastSession() {
 
   const lastSession = selectedAthleteSessions[0];
 
-  summaryDiv.innerHTML = `
-    <p><strong>Date:</strong> ${lastSession.session_date || "-"}</p>
-    <p><strong>Exercise:</strong> ${lastSession.exercise || "-"}</p>
-    <p><strong>Weight:</strong> ${lastSession.weight || "-"}</p>
-    <p><strong>Reps:</strong> ${lastSession.reps || "-"}</p>
-    <p><strong>Sets:</strong> ${lastSession.sets || "-"}</p>
-    <p><strong>Assist Level:</strong> ${lastSession.assist_level || "-"}</p>
-    <p><strong>Notes:</strong> ${lastSession.notes || "-"}</p>
-  `;
+ summaryDiv.innerHTML = `
+  <p><strong>Date:</strong> ${lastSession.session_date || "-"}</p>
+  <p><strong>Exercise:</strong> ${lastSession.exercise || "-"}</p>
+  <p><strong>Primary Metric:</strong> ${formatPrimaryMetric(lastSession) || "-"}</p>
+  <p><strong>Reps:</strong> ${lastSession.reps || "-"}</p>
+  <p><strong>Sets:</strong> ${lastSession.sets || "-"}</p>
+  <p><strong>Notes:</strong> ${lastSession.notes || "-"}</p>
+`;
 }
 
 // Metric Values
@@ -1068,6 +1067,7 @@ function cancelEdit() {
     block: "start"
   });
 }
+
 
 
 
