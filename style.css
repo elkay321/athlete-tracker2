@@ -215,3 +215,11 @@ td {
     grid-template-columns: 1fr;
   }
 }
+
+.support-profile-grid textarea {
+  min-height: 55px;
+}
+
+.support-profile-grid select {
+  height: 42px;
+}
