@@ -217,22 +217,49 @@ async function configureMetricField(metricType, exerciseId = "", selectedValue =
   const metricValueNumber = document.getElementById("metricValueNumber");
   const metricValueText = document.getElementById("metricValueText");
 
-  // Hide everything first
+  const weightFieldWrapper = document.getElementById("weightFieldWrapper");
+  const metricValueNumberWrapper = document.getElementById("metricValueNumberWrapper");
+  const metricValueTextWrapper = document.getElementById("metricValueTextWrapper");
+  const repsFieldWrapper = document.getElementById("repsFieldWrapper");
+  const setsFieldWrapper = document.getElementById("setsFieldWrapper");
+
+  // reset all input values
+  weightSelect.innerHTML = `<option value="">Weight</option>`;
+  metricValueNumber.value = "";
+  metricValueText.value = "";
+  document.getElementById("reps").value = "";
+  document.getElementById("sets").value = "";
+
+  // hide all optional slots first
+  weightFieldWrapper.classList.add("field-hidden");
+  metricValueNumberWrapper.classList.add("field-hidden");
+  metricValueTextWrapper.classList.add("field-hidden");
+  repsFieldWrapper.classList.add("field-hidden");
+  setsFieldWrapper.classList.add("field-hidden");
+
+  // also hide inner controls that are conditional
   weightSelect.style.display = "none";
   metricValueNumber.style.display = "none";
   metricValueText.style.display = "none";
 
-  // Clear old values
-  metricValueNumber.value = "";
-  metricValueText.value = "";
-
   if (metricType === "weight") {
+    weightFieldWrapper.classList.remove("field-hidden");
+    repsFieldWrapper.classList.remove("field-hidden");
+    setsFieldWrapper.classList.remove("field-hidden");
+
     weightSelect.style.display = "block";
     await loadWeightOptions(exerciseId, selectedValue);
     return;
   }
 
+  if (metricType === "reps") {
+    repsFieldWrapper.classList.remove("field-hidden");
+    setsFieldWrapper.classList.remove("field-hidden");
+    return;
+  }
+
   if (metricType === "seconds") {
+    metricValueNumberWrapper.classList.remove("field-hidden");
     metricValueNumber.style.display = "block";
     metricValueNumber.placeholder = "Seconds";
     metricValueNumber.value = selectedValue || "";
@@ -240,6 +267,7 @@ async function configureMetricField(metricType, exerciseId = "", selectedValue =
   }
 
   if (metricType === "minutes") {
+    metricValueNumberWrapper.classList.remove("field-hidden");
     metricValueNumber.style.display = "block";
     metricValueNumber.placeholder = "Minutes";
     metricValueNumber.value = selectedValue || "";
@@ -247,6 +275,7 @@ async function configureMetricField(metricType, exerciseId = "", selectedValue =
   }
 
   if (metricType === "percent") {
+    metricValueNumberWrapper.classList.remove("field-hidden");
     metricValueNumber.style.display = "block";
     metricValueNumber.placeholder = "Percent";
     metricValueNumber.value = selectedValue || "";
@@ -254,14 +283,15 @@ async function configureMetricField(metricType, exerciseId = "", selectedValue =
   }
 
   if (metricType === "level") {
+    metricValueTextWrapper.classList.remove("field-hidden");
     metricValueText.style.display = "block";
     metricValueText.placeholder = "Level (e.g. wall, box, ground or 4 in, 6 in)";
     metricValueText.value = selectedValue || "";
+
+    repsFieldWrapper.classList.remove("field-hidden");
+    setsFieldWrapper.classList.remove("field-hidden");
     return;
   }
-
-  // reps or anything else:
-  // no primary metric field needed
 }
 
 // -----------------------------
@@ -1009,6 +1039,7 @@ function cancelEdit() {
     block: "start"
   });
 }
+
 
 
 
