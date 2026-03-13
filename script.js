@@ -623,6 +623,11 @@ document.getElementById("repsFieldWrapper").classList.add("field-hidden");
 document.getElementById("setsFieldWrapper").classList.add("field-hidden");
 document.getElementById("assistLevel").value = "";
 document.getElementById("sessionNotes").value = "";
+
+document.getElementById("sessionFormTitle").scrollIntoView({
+  behavior: "smooth",
+  block: "start"
+});
 }
 
 function renderLastSession() {
@@ -1067,6 +1072,7 @@ function cancelEdit() {
     block: "start"
   });
 }
+
 
 
 
