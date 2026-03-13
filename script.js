@@ -748,7 +748,6 @@ async function saveSession() {
 
   const repsRaw = document.getElementById("reps").value;
   const setsRaw = document.getElementById("sets").value;
-  const assistLevel = document.getElementById("assistLevel").value.trim();
   const notes = document.getElementById("sessionNotes").value.trim();
 
   let primaryMetricValue = null;
@@ -777,7 +776,6 @@ async function saveSession() {
         weight: metricType === "weight" && primaryMetricValue ? Number(primaryMetricValue) : null,
         reps: repsRaw === "" ? null : Number(repsRaw),
         sets: setsRaw === "" ? null : Number(setsRaw),
-        assist_level: assistLevel || null,
         notes: notes || null
       })
       .eq("id", editingSessionId);
@@ -796,7 +794,6 @@ async function saveSession() {
           weight: metricType === "weight" && primaryMetricValue ? Number(primaryMetricValue) : null,
           reps: repsRaw === "" ? null : Number(repsRaw),
           sets: setsRaw === "" ? null : Number(setsRaw),
-          assist_level: assistLevel || null,
           notes: notes || null
         }
       ]);
@@ -1071,6 +1068,7 @@ function cancelEdit() {
     block: "start"
   });
 }
+
 
 
 
