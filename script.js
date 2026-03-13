@@ -466,6 +466,34 @@ function hideAddAthleteForm() {
   document.getElementById("newAthleteCoach").value = "";
 }
 
+// LEVEL DROPDOWN OPTIONS
+
+function loadLevelOptions(exerciseName, selectedValue = "") {
+  const metricValueSelect = document.getElementById("metricValueSelect");
+  metricValueSelect.innerHTML = `<option value="">Select option</option>`;
+
+  let options = [];
+
+  if (exerciseName === "Push-ups") {
+    options = ["Wall", "Box", "Ground"];
+  }
+
+  if (exerciseName === "Box Step-ups") {
+    options = ['12"', '16"', '20"', '24"'];
+  }
+
+  options.forEach((value) => {
+    const option = document.createElement("option");
+    option.value = value;
+    option.textContent = value;
+    metricValueSelect.appendChild(option);
+  });
+
+  if (selectedValue) {
+    metricValueSelect.value = selectedValue;
+  }
+}
+
 // -----------------------------
 // ATHLETES
 // -----------------------------
@@ -1043,6 +1071,7 @@ function cancelEdit() {
     block: "start"
   });
 }
+
 
 
 
