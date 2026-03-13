@@ -212,38 +212,32 @@ function formatPrimaryMetric(session) {
   return "";
 }
 
-async function configureMetricField(metricType, exerciseId = "", selectedValue = "") {
+async function configureMetricField(metricType, exerciseId = "", exerciseName = "", selectedValue = "") {
   const weightSelect = document.getElementById("weight");
   const metricValueNumber = document.getElementById("metricValueNumber");
-  const metricValueText = document.getElementById("metricValueText");
+  const metricValueSelect = document.getElementById("metricValueSelect");
 
-  const weightFieldWrapper = document.getElementById("weightFieldWrapper");
-  const metricValueNumberWrapper = document.getElementById("metricValueNumberWrapper");
-  const metricValueTextWrapper = document.getElementById("metricValueTextWrapper");
+  const primaryMetricWrapper = document.getElementById("primaryMetricWrapper");
   const repsFieldWrapper = document.getElementById("repsFieldWrapper");
   const setsFieldWrapper = document.getElementById("setsFieldWrapper");
 
-  // reset all input values
+  // Reset values
   weightSelect.innerHTML = `<option value="">Weight</option>`;
   metricValueNumber.value = "";
-  metricValueText.value = "";
-  document.getElementById("reps").value = "";
-  document.getElementById("sets").value = "";
+  metricValueSelect.innerHTML = `<option value="">Select option</option>`;
 
-  // hide all optional slots first
-  weightFieldWrapper.classList.add("field-hidden");
-  metricValueNumberWrapper.classList.add("field-hidden");
-  metricValueTextWrapper.classList.add("field-hidden");
+  // Hide all metric inputs first
+  weightSelect.style.display = "none";
+  metricValueNumber.style.display = "none";
+  metricValueSelect.style.display = "none";
+
+  // Hide optional fields first
+  primaryMetricWrapper.classList.add("field-hidden");
   repsFieldWrapper.classList.add("field-hidden");
   setsFieldWrapper.classList.add("field-hidden");
 
-  // also hide inner controls that are conditional
-  weightSelect.style.display = "none";
-  metricValueNumber.style.display = "none";
-  metricValueText.style.display = "none";
-
   if (metricType === "weight") {
-    weightFieldWrapper.classList.remove("field-hidden");
+    primaryMetricWrapper.classList.remove("field-hidden");
     repsFieldWrapper.classList.remove("field-hidden");
     setsFieldWrapper.classList.remove("field-hidden");
 
@@ -259,7 +253,7 @@ async function configureMetricField(metricType, exerciseId = "", selectedValue =
   }
 
   if (metricType === "seconds") {
-    metricValueNumberWrapper.classList.remove("field-hidden");
+    primaryMetricWrapper.classList.remove("field-hidden");
     metricValueNumber.style.display = "block";
     metricValueNumber.placeholder = "Seconds";
     metricValueNumber.value = selectedValue || "";
@@ -267,7 +261,7 @@ async function configureMetricField(metricType, exerciseId = "", selectedValue =
   }
 
   if (metricType === "minutes") {
-    metricValueNumberWrapper.classList.remove("field-hidden");
+    primaryMetricWrapper.classList.remove("field-hidden");
     metricValueNumber.style.display = "block";
     metricValueNumber.placeholder = "Minutes";
     metricValueNumber.value = selectedValue || "";
@@ -275,7 +269,7 @@ async function configureMetricField(metricType, exerciseId = "", selectedValue =
   }
 
   if (metricType === "percent") {
-    metricValueNumberWrapper.classList.remove("field-hidden");
+    primaryMetricWrapper.classList.remove("field-hidden");
     metricValueNumber.style.display = "block";
     metricValueNumber.placeholder = "Percent";
     metricValueNumber.value = selectedValue || "";
@@ -283,13 +277,12 @@ async function configureMetricField(metricType, exerciseId = "", selectedValue =
   }
 
   if (metricType === "level") {
-    metricValueTextWrapper.classList.remove("field-hidden");
-    metricValueText.style.display = "block";
-    metricValueText.placeholder = "Level (e.g. wall, box, ground or 4 in, 6 in)";
-    metricValueText.value = selectedValue || "";
-
+    primaryMetricWrapper.classList.remove("field-hidden");
     repsFieldWrapper.classList.remove("field-hidden");
     setsFieldWrapper.classList.remove("field-hidden");
+
+    metricValueSelect.style.display = "block";
+    loadLevelOptions(exerciseName, selectedValue);
     return;
   }
 }
@@ -1071,6 +1064,7 @@ function cancelEdit() {
     block: "start"
   });
 }
+
 
 
 
