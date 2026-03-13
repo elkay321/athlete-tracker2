@@ -175,3 +175,10 @@ td {
   }
 }
 
+.field-hidden {
+  visibility: hidden;
+}
+
+.form-grid > div {
+  min-height: 48px;
+}
