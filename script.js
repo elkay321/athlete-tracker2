@@ -758,8 +758,8 @@ async function saveSession() {
   } else if (metricType === "seconds" || metricType === "minutes" || metricType === "percent") {
     primaryMetricValue = document.getElementById("metricValueNumber").value || null;
   } else if (metricType === "level") {
-    primaryMetricValue = document.getElementById("metricValueText").value.trim() || null;
-  }
+  primaryMetricValue = document.getElementById("metricValueSelect").value || null;
+}
 
   if (exercise === "") return;
 
@@ -821,20 +821,26 @@ async function saveSession() {
     `Add New Session for ${athletes[selectedAthleteIndex].name}`;
 
   // Clear form fields
-  document.getElementById("exerciseName").value = "";
-  document.getElementById("weight").innerHTML = `<option value="">Weight</option>`;
-  document.getElementById("weight").style.display = "none";
+ document.getElementById("exerciseName").value = "";
 
-  document.getElementById("metricValueNumber").value = "";
-  document.getElementById("metricValueNumber").style.display = "none";
+document.getElementById("weight").innerHTML = `<option value="">Weight</option>`;
+document.getElementById("weight").style.display = "none";
 
-  document.getElementById("metricValueText").value = "";
-  document.getElementById("metricValueText").style.display = "none";
+document.getElementById("metricValueNumber").value = "";
+document.getElementById("metricValueNumber").style.display = "none";
 
-  document.getElementById("reps").value = "";
-  document.getElementById("sets").value = "";
-  document.getElementById("assistLevel").value = "";
-  document.getElementById("sessionNotes").value = "";
+document.getElementById("metricValueSelect").innerHTML = `<option value="">Select option</option>`;
+document.getElementById("metricValueSelect").style.display = "none";
+
+document.getElementById("primaryMetricWrapper").classList.add("field-hidden");
+
+document.getElementById("reps").value = "";
+document.getElementById("sets").value = "";
+document.getElementById("repsFieldWrapper").classList.add("field-hidden");
+document.getElementById("setsFieldWrapper").classList.add("field-hidden");
+
+document.getElementById("assistLevel").value = "";
+document.getElementById("sessionNotes").value = "";
 
   // Keep user near the relevant section
   if (wasEditing) {
@@ -949,7 +955,7 @@ document.getElementById("exerciseName").addEventListener("change", async functio
   const exerciseName = selectedOption?.dataset?.exerciseName || "";
   const metricType = selectedOption?.dataset?.metricType || "";
 
-  await configureMetricField(metricType, exerciseId);
+  await configureMetricField(metricType, exerciseId, exerciseName);
   await loadLastExerciseSession(exerciseName);
 });
 
@@ -1023,10 +1029,11 @@ async function editSession(sessionId) {
   exerciseSelect.value = matchedExerciseId;
 
   await configureMetricField(
-    matchedMetricType,
-    matchedExerciseId,
-    session.primary_metric_value || session.weight || ""
-  );
+  matchedMetricType,
+  matchedExerciseId,
+  session.exercise,
+  session.primary_metric_value || session.weight || ""
+);
 
   document.getElementById("reps").value = session.reps || "";
   document.getElementById("sets").value = session.sets || "";
@@ -1064,6 +1071,7 @@ function cancelEdit() {
     block: "start"
   });
 }
+
 
 
 
