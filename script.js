@@ -106,7 +106,21 @@ console.log("Exercises query error:", error);
   }
 
   const exerciseSelect = document.getElementById("exerciseName");
-  exerciseSelect.innerHTML = `<option value="">Select exercise</option>`;
+const selectedExerciseOption = exerciseSelect.options[exerciseSelect.selectedIndex];
+
+const exerciseId = exerciseSelect.value;
+const metricType = selectedExerciseOption?.dataset?.metricType || "";
+const exercise = selectedExerciseOption?.dataset?.exerciseName || "";
+
+let primaryMetricValue = null;
+
+if (metricType === "weight") {
+  primaryMetricValue = document.getElementById("weight").value || null;
+} else if (metricType === "seconds" || metricType === "minutes" || metricType === "percent") {
+  primaryMetricValue = document.getElementById("metricValueNumber").value || null;
+} else if (metricType === "level") {
+  primaryMetricValue = document.getElementById("metricValueText").value.trim() || null;
+}
 
  (data || []).forEach((exercise) => {
   const option = document.createElement("option");
@@ -576,6 +590,41 @@ function renderLastSession() {
   `;
 }
 
+// Metric Values
+
+function formatPrimaryMetric(session) {
+  const metricType = session.primary_metric_type || "";
+
+  if (metricType === "weight") {
+    const value = session.primary_metric_value || session.weight || "";
+    return value ? `${value} lb` : "";
+  }
+
+  if (metricType === "seconds") {
+    return session.primary_metric_value ? `${session.primary_metric_value} sec` : "";
+  }
+
+  if (metricType === "minutes") {
+    return session.primary_metric_value ? `${session.primary_metric_value} min` : "";
+  }
+
+  if (metricType === "percent") {
+    return session.primary_metric_value ? `${session.primary_metric_value}%` : "";
+  }
+
+  if (metricType === "level") {
+    return session.primary_metric_value || "";
+  }
+
+  // fallback for older rows
+  if (session.weight) {
+    return `${session.weight} lb`;
+  }
+
+  return "";
+}
+
+// Render History
 function renderHistory() {
 
   const historyBody = document.getElementById("historyBody");
@@ -597,7 +646,7 @@ function renderHistory() {
     row.innerHTML = `
       <td>${session.session_date || ""}</td>
       <td>${session.exercise || ""}</td>
-      <td>${session.weight || ""}</td>
+      <td>${formatPrimaryMetric(session)}</td>
       <td>${session.reps || ""}</td>
       <td>${session.sets || ""}</td>
       <td>${session.assist_level || ""}</td>
@@ -633,12 +682,28 @@ async function saveSession() {
   if (!athlete) return;
 
   const date = document.getElementById("sessionDate").value;
-  const exercise = document.getElementById("exerciseName").value.trim();
-  const weightRaw = document.getElementById("weight").value;
+
+  const exerciseSelect = document.getElementById("exerciseName");
+  const selectedExerciseOption = exerciseSelect.options[exerciseSelect.selectedIndex];
+
+  const exerciseId = exerciseSelect.value;
+  const metricType = selectedExerciseOption?.dataset?.metricType || "";
+  const exercise = selectedExerciseOption?.dataset?.exerciseName || "";
+
   const repsRaw = document.getElementById("reps").value;
   const setsRaw = document.getElementById("sets").value;
   const assistLevel = document.getElementById("assistLevel").value.trim();
   const notes = document.getElementById("sessionNotes").value.trim();
+
+  let primaryMetricValue = null;
+
+  if (metricType === "weight") {
+    primaryMetricValue = document.getElementById("weight").value || null;
+  } else if (metricType === "seconds" || metricType === "minutes" || metricType === "percent") {
+    primaryMetricValue = document.getElementById("metricValueNumber").value || null;
+  } else if (metricType === "level") {
+    primaryMetricValue = document.getElementById("metricValueText").value.trim() || null;
+  }
 
   if (exercise === "") return;
 
@@ -651,7 +716,9 @@ async function saveSession() {
         athlete_id: athlete.id,
         session_date: date || null,
         exercise: exercise,
-        weight: weightRaw === "" ? null : Number(weightRaw),
+        primary_metric_type: metricType || null,
+        primary_metric_value: primaryMetricValue || null,
+        weight: metricType === "weight" && primaryMetricValue ? Number(primaryMetricValue) : null,
         reps: repsRaw === "" ? null : Number(repsRaw),
         sets: setsRaw === "" ? null : Number(setsRaw),
         assist_level: assistLevel || null,
@@ -668,7 +735,9 @@ async function saveSession() {
           athlete_id: athlete.id,
           session_date: date || null,
           exercise: exercise,
-          weight: weightRaw === "" ? null : Number(weightRaw),
+          primary_metric_type: metricType || null,
+          primary_metric_value: primaryMetricValue || null,
+          weight: metricType === "weight" && primaryMetricValue ? Number(primaryMetricValue) : null,
           reps: repsRaw === "" ? null : Number(repsRaw),
           sets: setsRaw === "" ? null : Number(setsRaw),
           assist_level: assistLevel || null,
@@ -685,7 +754,7 @@ async function saveSession() {
     return;
   }
 
-   const wasEditing = !!editingSessionId;
+  const wasEditing = !!editingSessionId;
 
   editingSessionId = null;
   document.getElementById("cancelEditBtn").style.display = "none";
@@ -695,9 +764,17 @@ async function saveSession() {
   document.getElementById("sessionFormTitle").textContent =
     `Add New Session for ${athletes[selectedAthleteIndex].name}`;
 
-  // Clear exercise fields for quick entry of next exercise
+  // Clear form fields
   document.getElementById("exerciseName").value = "";
-  document.getElementById("weight").value = "";
+  document.getElementById("weight").innerHTML = `<option value="">Weight</option>`;
+  document.getElementById("weight").style.display = "none";
+
+  document.getElementById("metricValueNumber").value = "";
+  document.getElementById("metricValueNumber").style.display = "none";
+
+  document.getElementById("metricValueText").value = "";
+  document.getElementById("metricValueText").style.display = "none";
+
   document.getElementById("reps").value = "";
   document.getElementById("sets").value = "";
   document.getElementById("assistLevel").value = "";
@@ -876,8 +953,26 @@ async function editSession(sessionId) {
   document.getElementById("cancelEditBtn").style.display = "inline-block";
 
   document.getElementById("sessionDate").value = session.session_date || "";
-  document.getElementById("exerciseName").value = session.exercise || "";
-  document.getElementById("weight").value = session.weight || "";
+
+  const exerciseSelect = document.getElementById("exerciseName");
+  let matchedExerciseId = "";
+  let matchedMetricType = "";
+
+  Array.from(exerciseSelect.options).forEach((option) => {
+    if (option.dataset.exerciseName === session.exercise) {
+      matchedExerciseId = option.value;
+      matchedMetricType = option.dataset.metricType || "";
+    }
+  });
+
+  exerciseSelect.value = matchedExerciseId;
+
+  await configureMetricField(
+    matchedMetricType,
+    matchedExerciseId,
+    session.primary_metric_value || session.weight || ""
+  );
+
   document.getElementById("reps").value = session.reps || "";
   document.getElementById("sets").value = session.sets || "";
   document.getElementById("assistLevel").value = session.assist_level || "";
@@ -886,7 +981,6 @@ async function editSession(sessionId) {
   document.getElementById("sessionFormTitle").textContent =
     `Editing Session for ${athletes[selectedAthleteIndex].name}`;
 
-  // Keep the user near the form
   document.getElementById("sessionFormTitle").scrollIntoView({
     behavior: "smooth",
     block: "start"
@@ -915,6 +1009,7 @@ function cancelEdit() {
     block: "start"
   });
 }
+
 
 
 
