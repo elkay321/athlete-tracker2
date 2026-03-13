@@ -223,3 +223,22 @@ td {
 .support-profile-grid select {
   height: 42px;
 }
+
+.support-profile-grid > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.support-profile-grid textarea,
+.support-profile-grid select {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.support-profile-grid textarea {
+  min-height: 70px;
+}
+
+.support-profile-grid select {
+  min-height: 70px;
+}
