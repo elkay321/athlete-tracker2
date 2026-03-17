@@ -625,10 +625,10 @@ async function openAthleteProfile(index) {
   // Reset remaining fields
   document.getElementById("sessionNotes").value = "";
 
-  document.getElementById("athleteProfileSection").scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-  });
+  document.getElementById("sessionFormCard").scrollIntoView({
+  behavior: "smooth",
+  block: "start"
+});
 }
 
 function renderLastSession() {
@@ -1073,6 +1073,7 @@ function cancelEdit() {
     block: "start"
   });
 }
+
 
 
 
