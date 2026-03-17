@@ -468,12 +468,13 @@ function loadLevelOptions(exerciseName, selectedValue = "") {
   metricValueSelect.innerHTML = `<option value="">Select option</option>`;
 
   let options = [];
+  const name = (exerciseName || "").toLowerCase();
 
-  if (exerciseName === "Push-ups") {
+  if (name.includes("push")) {
     options = ["Wall", "Box", "Ground"];
   }
 
-  if (exerciseName === "Box Step-ups") {
+  if (name.includes("step")) {
     options = ['12"', '16"', '20"', '24"'];
   }
 
@@ -1072,6 +1073,7 @@ function cancelEdit() {
     block: "start"
   });
 }
+
 
 
 
