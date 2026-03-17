@@ -204,7 +204,7 @@ function formatPrimaryMetric(session) {
     return session.primary_metric_value || "";
   }
 
-  // For older rows without primary_metric fields
+  // fallback for older weight rows
   if (session.weight) {
     return `${session.weight} lb`;
   }
@@ -1072,6 +1072,7 @@ function cancelEdit() {
     block: "start"
   });
 }
+
 
 
 
