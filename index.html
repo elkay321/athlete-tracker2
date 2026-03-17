@@ -116,50 +116,51 @@
           <div id="lastSessionSummary">No sessions recorded yet.</div>
         </div>
 
-        <div class="card inner-card sticky-session-form">
-          <h3 id="sessionFormTitle">Add New Session</h3>
-         <div class="form-grid">
+       <div class="card inner-card sticky-session-form">
+  <h3 id="sessionFormTitle">Add New Session</h3>
 
-  <div id="sessionDateWrapper">
-    <input id="sessionDate" type="date" />
+  <div class="form-grid">
+
+    <div id="sessionDateWrapper">
+      <input id="sessionDate" type="date" />
+    </div>
+
+    <div id="exerciseNameWrapper">
+      <select id="exerciseName">
+        <option value="">Select exercise</option>
+      </select>
+    </div>
+
+    <div id="primaryMetricWrapper">
+      <select id="weight" style="display:none;">
+        <option value="">Weight</option>
+      </select>
+
+      <input id="metricValueNumber" type="number" placeholder="Metric Value" style="display:none;" />
+
+      <select id="metricValueSelect" style="display:none;">
+        <option value="">Select option</option>
+      </select>
+    </div>
+
+    <div id="repsFieldWrapper">
+      <input id="reps" type="number" placeholder="Reps" />
+    </div>
+
+    <div id="setsFieldWrapper">
+      <input id="sets" type="number" placeholder="Sets" />
+    </div>
+
   </div>
 
-  <div id="exerciseNameWrapper">
-    <select id="exerciseName">
-      <option value="">Select exercise</option>
-    </select>
+  <!-- ✅ NOTES NOW IN THE RIGHT PLACE -->
+  <textarea id="sessionNotes" placeholder="Notes"></textarea>
+
+  <div class="button-row">
+    <button onclick="saveSession()">Save Session</button>
+    <button id="cancelEditBtn" onclick="cancelEdit()" style="display:none;">Cancel Edit</button>
   </div>
-
- <div id="primaryMetricWrapper">
-  <select id="weight" style="display:none;">
-    <option value="">Weight</option>
-  </select>
-
-  <input id="metricValueNumber" type="number" placeholder="Metric Value" style="display:none;" />
-
-  <select id="metricValueSelect" style="display:none;">
-    <option value="">Select option</option>
-  </select>
 </div>
-
-  <div id="repsFieldWrapper">
-    <input id="reps" type="number" placeholder="Reps" />
-  </div>
-
-  <div id="setsFieldWrapper">
-    <input id="sets" type="number" placeholder="Sets" />
-  </div>
-
-  
-</div>
-          </div>
-          <textarea id="sessionNotes" placeholder="Notes"></textarea>
-         <div class="button-row">
-          <button onclick="saveSession()">Save Session</button>
-          <button id="cancelEditBtn" onclick="cancelEdit()" style="display:none;">Cancel Edit</button>
-        </div>
-        </div>
-      </div>
 
       <div class="card inner-card">
         <h3>Session History</h3>
@@ -189,6 +190,7 @@
 </body>
 
 </html>
+
 
 
 
