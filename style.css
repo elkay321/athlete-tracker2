@@ -242,3 +242,11 @@ td {
 .support-profile-grid select {
   min-height: 70px;
 }
+
+#sessionNotes {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 70px;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
