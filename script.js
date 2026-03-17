@@ -694,7 +694,7 @@ function renderHistory() {
   if (!selectedAthleteSessions || selectedAthleteSessions.length === 0) {
     historyBody.innerHTML = `
       <tr>
-        <td colspan="9">No session history yet.</td>
+        <td colspan="8">No session history yet.</td>
       </tr>
     `;
     return;
@@ -710,7 +710,6 @@ function renderHistory() {
       <td>${formatPrimaryMetric(session)}</td>
       <td>${session.reps || ""}</td>
       <td>${session.sets || ""}</td>
-      <td>${session.assist_level || ""}</td>
       <td>${session.notes || ""}</td>
 
       <td><button class="edit-session-btn">Edit</button></td>
@@ -1073,6 +1072,7 @@ function cancelEdit() {
     block: "start"
   });
 }
+
 
 
 
