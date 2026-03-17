@@ -204,7 +204,7 @@ function formatPrimaryMetric(session) {
     return session.primary_metric_value || "";
   }
 
-  // fallback for older weight rows
+  // For older rows without primary_metric fields
   if (session.weight) {
     return `${session.weight} lb`;
   }
@@ -641,15 +641,16 @@ function renderLastSession() {
 
   const lastSession = selectedAthleteSessions[0];
 
-  summaryDiv.innerHTML = `
-    <p><strong>Date:</strong> ${lastSession.session_date || "-"}</p>
-    <p><strong>Exercise:</strong> ${lastSession.exercise || "-"}</p>
-    <p><strong>Primary Metric:</strong> ${formatPrimaryMetric(lastSession) || "-"}</p>
-    <p><strong>Reps:</strong> ${lastSession.reps || "-"}</p>
-    <p><strong>Sets:</strong> ${lastSession.sets || "-"}</p>
-    <p><strong>Notes:</strong> ${lastSession.notes || "-"}</p>
-  `;
+ summaryDiv.innerHTML = `
+  <p><strong>Date:</strong> ${lastSession.session_date || "-"}</p>
+  <p><strong>Exercise:</strong> ${lastSession.exercise || "-"}</p>
+  <p><strong>Primary Metric:</strong> ${formatPrimaryMetric(lastSession) || "-"}</p>
+  <p><strong>Reps:</strong> ${lastSession.reps || "-"}</p>
+  <p><strong>Sets:</strong> ${lastSession.sets || "-"}</p>
+  <p><strong>Notes:</strong> ${lastSession.notes || "-"}</p>
+`;
 }
+
 // Metric Values
 
 function formatPrimaryMetric(session) {
@@ -1072,7 +1073,6 @@ function cancelEdit() {
     block: "start"
   });
 }
-
 
 
 
