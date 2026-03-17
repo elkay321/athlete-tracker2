@@ -589,46 +589,45 @@ async function openAthleteProfile(index) {
   document.getElementById("profileName").textContent = athlete.name;
   document.getElementById("profileMeta").textContent =
     `Program/Class: ${athlete.program || "Not entered"} | Coach: ${athlete.coach || "Not entered"}`;
-  
+
   document.getElementById("sessionFormTitle").textContent = `Add New Session for ${athlete.name}`;
-  
+
   document.getElementById("athleteTriggers").value = athlete.triggers || "";
   document.getElementById("athletePreferences").value = athlete.preferences || "";
   document.getElementById("athleteCommunicationStyle").value = athlete.communication_style || "";
-  
+
   renderLastSession();
   renderHistory();
 
-const today = new Date().toISOString().split("T")[0];
-document.getElementById("sessionDate").value = today;
-document.getElementById("exerciseName").value = "";
+  const today = new Date().toISOString().split("T")[0];
+  document.getElementById("sessionDate").value = today;
+  document.getElementById("exerciseName").value = "";
 
-// Reset weight dropdown
-document.getElementById("weight").innerHTML = `<option value="">Weight</option>`;
-document.getElementById("weight").style.display = "none";
-document.getElementById("weightFieldWrapper").classList.add("field-hidden");
+  // Reset primary metric area
+  document.getElementById("weight").innerHTML = `<option value="">Weight</option>`;
+  document.getElementById("weight").style.display = "none";
 
-// Reset dynamic metric fields
-document.getElementById("metricValueNumber").value = "";
-document.getElementById("metricValueNumber").style.display = "none";
-document.getElementById("metricValueNumberWrapper").classList.add("field-hidden");
+  document.getElementById("metricValueNumber").value = "";
+  document.getElementById("metricValueNumber").style.display = "none";
 
-document.getElementById("metricValueText").value = "";
-document.getElementById("metricValueText").style.display = "none";
-document.getElementById("metricValueTextWrapper").classList.add("field-hidden");
+  document.getElementById("metricValueSelect").innerHTML = `<option value="">Select option</option>`;
+  document.getElementById("metricValueSelect").style.display = "none";
 
-// Reset remaining fields
-document.getElementById("reps").value = "";
-document.getElementById("sets").value = "";
-document.getElementById("repsFieldWrapper").classList.add("field-hidden");
-document.getElementById("setsFieldWrapper").classList.add("field-hidden");
-document.getElementById("assistLevel").value = "";
-document.getElementById("sessionNotes").value = "";
+  document.getElementById("primaryMetricWrapper").classList.add("field-hidden");
 
-document.getElementById("sessionFormTitle").scrollIntoView({
-  behavior: "smooth",
-  block: "start"
-});
+  // Reset reps / sets
+  document.getElementById("reps").value = "";
+  document.getElementById("sets").value = "";
+  document.getElementById("repsFieldWrapper").classList.add("field-hidden");
+  document.getElementById("setsFieldWrapper").classList.add("field-hidden");
+
+  // Reset remaining fields
+  document.getElementById("sessionNotes").value = "";
+
+  document.getElementById("athleteProfileSection").scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
 }
 
 function renderLastSession() {
@@ -1073,6 +1072,7 @@ function cancelEdit() {
     block: "start"
   });
 }
+
 
 
 
