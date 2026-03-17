@@ -110,22 +110,14 @@
 
 </div>
       
-      <div class="profile-grid">
+     <div class="profile-grid">
   <div class="card inner-card">
-    <!-- Last Recorded Session -->
-  </div>
-
-  <div class="card inner-card">
-    <!-- (other card if any) -->
+    <h3>Last Recorded Session</h3>
+    <div id="lastSessionSummary">No sessions recorded yet.</div>
   </div>
 </div>
 
-<!-- ✅ MOVE SESSION FORM OUTSIDE GRID -->
-<div class="card inner-card sticky-session-form full-width-card">
-  <!-- Add New Session -->
-</div>
-
-       <div class="card inner-card sticky-session-form">
+<div class="card inner-card full-width-card" id="sessionFormCard">
   <h3 id="sessionFormTitle">Add New Session</h3>
 
   <div class="form-grid">
@@ -162,7 +154,6 @@
 
   </div>
 
-  <!-- ✅ NOTES NOW IN THE RIGHT PLACE -->
   <textarea id="sessionNotes" placeholder="Notes"></textarea>
 
   <div class="button-row">
@@ -171,27 +162,26 @@
   </div>
 </div>
 
-      <div class="card inner-card">
-        <h3>Session History</h3>
-        <table id="historyTable">
-          <thead>
-          <tr>
-            <th>Date</th>
-            <th>Exercise</th>
-            <th>Primary Metric</th>
-            <th>Reps</th>
-            <th>Sets</th>
-            <th>Assist Level</th>
-            <th>Notes</th>
-            <th>Edit</th>
-            <th>Delete</th>
-          </tr>
-        </thead>
-          <tbody id="historyBody"></tbody>
-        </table>
-      </div>
-    </section>
-  </div>
+<div class="card inner-card">
+  <h3>Session History</h3>
+  <table id="historyTable">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Exercise</th>
+        <th>Primary Metric</th>
+        <th>Reps</th>
+        <th>Sets</th>
+        <th>Notes</th>
+        <th>Edit</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody id="historyBody"></tbody>
+  </table>
+</div>
+</section>
+</div>
 </div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   
@@ -199,6 +189,7 @@
 </body>
 
 </html>
+
 
 
 
