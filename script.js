@@ -326,7 +326,6 @@ async function loadLastExerciseSession(exerciseName) {
     <p><strong>Weight:</strong> ${session.weight || "-"}</p>
     <p><strong>Reps:</strong> ${session.reps || "-"}</p>
     <p><strong>Sets:</strong> ${session.sets || "-"}</p>
-    <p><strong>Assist Level:</strong> ${session.assist_level || "-"}</p>
     <p><strong>Notes:</strong> ${session.notes || "-"}</p>
   `;
 }
@@ -840,7 +839,6 @@ document.getElementById("sets").value = "";
 document.getElementById("repsFieldWrapper").classList.add("field-hidden");
 document.getElementById("setsFieldWrapper").classList.add("field-hidden");
 
-document.getElementById("assistLevel").value = "";
 document.getElementById("sessionNotes").value = "";
 
   // Keep user near the relevant section
@@ -892,7 +890,7 @@ async function saveAthleteProfileNotes() {
 // EXPORT
 // -----------------------------
 async function exportCSV() {
-  let csv = "Athlete Name,Program,Coach,Date,Exercise,Weight,Reps,Sets,Assist Level,Notes\n";
+  let csv = "Athlete Name,Program,Coach,Date,Exercise,Weight,Reps,Sets,Notes\n";
 
   for (const athlete of athletes) {
     const { data: sessions, error } = await supabaseClient
@@ -1062,7 +1060,6 @@ function cancelEdit() {
   document.getElementById("weight").value = "";
   document.getElementById("reps").value = "";
   document.getElementById("sets").value = "";
-  document.getElementById("assistLevel").value = "";
   document.getElementById("sessionNotes").value = "";
 
   document.getElementById("cancelEditBtn").style.display = "none";
@@ -1072,6 +1069,7 @@ function cancelEdit() {
     block: "start"
   });
 }
+
 
 
 
