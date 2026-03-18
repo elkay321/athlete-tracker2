@@ -65,9 +65,11 @@
         <input id="newAthleteCoach" type="text" placeholder="Coach" />
       </div>
       <div class="button-row">
-        <button onclick="addAthlete()">Save Athlete</button>
-        <button class="secondary" onclick="hideAddAthleteForm()">Cancel</button>
-      </div>
+  <button onclick="saveSession()">Save Session</button>
+  <button id="cancelEditBtn" onclick="cancelEdit()" style="display:none;">Cancel Edit</button>
+</div>
+
+<p id="sessionSaveMessage" class="save-message" style="display:none;"></p>
     </section>
 
     <section id="athleteProfileSection" class="card hidden">
