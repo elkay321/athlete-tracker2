@@ -292,7 +292,6 @@ async function configureMetricField(metricType, exerciseId = "", exerciseName = 
 // -----------------------------
 
 async function loadLastExerciseSession(exerciseName) {
-
   if (selectedAthleteIndex === null) return;
 
   const athlete = athletes[selectedAthleteIndex];
@@ -320,14 +319,23 @@ async function loadLastExerciseSession(exerciseName) {
 
   const session = data[0];
 
-  summaryDiv.innerHTML = `
+  let html = `
     <p><strong>Last ${exerciseName}</strong></p>
     <p><strong>Date:</strong> ${session.session_date || "-"}</p>
-    <p><strong>Weight:</strong> ${session.weight || "-"}</p>
-    <p><strong>Reps:</strong> ${session.reps || "-"}</p>
-    <p><strong>Sets:</strong> ${session.sets || "-"}</p>
-    <p><strong>Notes:</strong> ${session.notes || "-"}</p>
+    <p><strong>Primary Metric:</strong> ${formatPrimaryMetric(session) || "-"}</p>
   `;
+
+  if (session.reps !== null && session.reps !== undefined && session.reps !== "") {
+    html += `<p><strong>Reps:</strong> ${session.reps}</p>`;
+  }
+
+  if (session.sets !== null && session.sets !== undefined && session.sets !== "") {
+    html += `<p><strong>Sets:</strong> ${session.sets}</p>`;
+  }
+
+  html += `<p><strong>Notes:</strong> ${session.notes || "-"}</p>`;
+
+  summaryDiv.innerHTML = html;
 }
 
 // -----------------------------
