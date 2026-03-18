@@ -632,7 +632,7 @@ async function openAthleteProfile(index) {
   // Reset remaining fields
   document.getElementById("sessionNotes").value = "";
 
-  document.getElementById("sessionFormCard").scrollIntoView({
+  document.getElementById("athleteSupportProfileCard").scrollIntoView({
   behavior: "smooth",
   block: "start"
 });
