@@ -682,7 +682,12 @@ div.onclick = async () => {
 
 // ATHLETE PROFILE //
 
-async function openAthleteProfile(index) {
+async function openAthleteProfile(index, options = {}) {
+  const {
+    preserveForm = false,
+    scrollToSessionSection = true
+  } = options;
+
   selectedAthleteIndex = index;
   const athlete = athletes[index];
 
@@ -695,44 +700,26 @@ async function openAthleteProfile(index) {
   document.getElementById("profileMeta").textContent =
     `Program/Class: ${athlete.program || "Not entered"} | Coach: ${athlete.coach || "Not entered"}`;
 
-  document.getElementById("sessionFormTitle").textContent = `Add New Session for ${athlete.name}`;
-
   document.getElementById("athleteTriggers").value = athlete.triggers || "";
   document.getElementById("athletePreferences").value = athlete.preferences || "";
   document.getElementById("athleteCommunicationStyle").value = athlete.communication_style || "";
 
   renderLastSession();
   renderHistory();
+  setSessionFormTitle();
 
-  const today = new Date().toISOString().split("T")[0];
-  document.getElementById("sessionDate").value = today;
-  document.getElementById("exerciseName").value = "";
+  if (!preserveForm) {
+    editingSessionId = null;
+    const cancelEditBtn = document.getElementById("cancelEditBtn");
+    if (cancelEditBtn) {
+      cancelEditBtn.style.display = "none";
+    }
+    resetSessionForm();
+  }
 
-  // Reset primary metric area
-  document.getElementById("weight").innerHTML = `<option value="">Weight</option>`;
-  document.getElementById("weight").style.display = "none";
-
-  document.getElementById("metricValueNumber").value = "";
-  document.getElementById("metricValueNumber").style.display = "none";
-
-  document.getElementById("metricValueSelect").innerHTML = `<option value="">Select option</option>`;
-  document.getElementById("metricValueSelect").style.display = "none";
-
-  document.getElementById("primaryMetricWrapper").classList.add("field-hidden");
-
-  // Reset reps / sets
-  document.getElementById("reps").value = "";
-  document.getElementById("sets").value = "";
-  document.getElementById("repsFieldWrapper").classList.add("field-hidden");
-  document.getElementById("setsFieldWrapper").classList.add("field-hidden");
-
-  // Reset remaining fields
-  document.getElementById("sessionNotes").value = "";
-
-  document.getElementById("athleteSupportProfileCard").scrollIntoView({
-  behavior: "smooth",
-  block: "start"
-});
+  if (scrollToSessionSection) {
+    scrollToSessionForm();
+  }
 }
 
 function renderLastSession() {
