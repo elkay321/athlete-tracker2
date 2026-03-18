@@ -835,11 +835,12 @@ async function saveSession() {
 
   const wasEditing = !!editingSessionId;
 
-  editingSessionId = null;
-  showSessionSaveMessage(wasEditing ? "Session updated" : "Session saved");
-  document.getElementById("cancelEditBtn").style.display = "none";
+editingSessionId = null;
+document.getElementById("cancelEditBtn").style.display = "none";
 
-  await openAthleteProfile(selectedAthleteIndex);
+await openAthleteProfile(selectedAthleteIndex);
+
+showSessionSaveMessage(wasEditing ? "Session updated" : "Session saved");
 
   document.getElementById("sessionFormTitle").textContent =
     `Add New Session for ${athletes[selectedAthleteIndex].name}`;
