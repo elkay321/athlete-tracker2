@@ -644,8 +644,8 @@ function renderLastSession() {
   <p><strong>Date:</strong> ${lastSession.session_date || "-"}</p>
   <p><strong>Exercise:</strong> ${lastSession.exercise || "-"}</p>
   <p><strong>Primary Metric:</strong> ${formatPrimaryMetric(lastSession) || "-"}</p>
-  <p><strong>Reps:</strong> ${lastSession.reps || "-"}</p>
-  <p><strong>Sets:</strong> ${lastSession.sets || "-"}</p>
+  ${lastSession.reps ? `<p><strong>Reps:</strong> ${lastSession.reps}</p>` : ""}
+  ${lastSession.sets ? `<p><strong>Sets:</strong> ${lastSession.sets}</p>` : ""}
   <p><strong>Notes:</strong> ${lastSession.notes || "-"}</p>
 `;
 }
@@ -677,9 +677,13 @@ function formatPrimaryMetric(session) {
   }
 
   // fallback for older rows
-  if (session.weight) {
-    return `${session.weight} lb`;
-  }
+  if (session.primary_metric_value) {
+  return session.primary_metric_value;
+}
+
+if (session.weight) {
+  return `${session.weight} lb`;
+}
 
   return "";
 }
