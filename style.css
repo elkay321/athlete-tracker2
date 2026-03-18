@@ -266,3 +266,8 @@ td {
 #athleteSupportProfileCard {
   scroll-margin-top: 100px;
 }
+
+.save-message {
+  margin-top: 10px;
+  font-size: 14px;
+}
