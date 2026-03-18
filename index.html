@@ -1,3 +1,5 @@
+index - good
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -65,10 +67,10 @@
         <input id="newAthleteCoach" type="text" placeholder="Coach" />
       </div>
       <div class="button-row">
-  <button onclick="saveSession()">Save Session</button>
-  <button id="cancelEditBtn" onclick="cancelEdit()" style="display:none;">Cancel Edit</button>
-</div>
-
+        <button onclick="addAthlete()">Save Athlete</button>
+        <button class="secondary" onclick="hideAddAthleteForm()">Cancel</button>
+      </div>
+    </section>
 
     <section id="athleteProfileSection" class="card hidden">
   <div class="profile-header sticky-athlete-header">
@@ -119,7 +121,6 @@
 
   <div class="card inner-card sticky-session-form" id="sessionFormCard">
     <h3 id="sessionFormTitle">Add New Session</h3>
-    <p id="sessionSaveMessage" class="save-message" style="display:none;"></p>
 
     <div class="form-grid">
 
@@ -192,7 +193,6 @@
 </body>
 
 </html>
-
 
 
 
