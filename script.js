@@ -717,10 +717,16 @@ async function openAthleteProfile(index, options = {}) {
     resetSessionForm();
   }
 
-  if (scrollToSessionSection) {
-    scrollToSessionForm();
+    if (scrollToSessionSection) {
+    const supportCard = document.getElementById("athleteSupportProfileCard");
+
+    if (supportCard) {
+      supportCard.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
   }
-}
 
 function renderLastSession() {
   const summaryDiv = document.getElementById("lastSessionSummary");
