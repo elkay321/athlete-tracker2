@@ -262,3 +262,7 @@ td {
   gap: 20px;
   align-items: start;
 }
+
+#athleteSupportProfileCard {
+  scroll-margin-top: 100px;
+}
