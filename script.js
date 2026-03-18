@@ -466,6 +466,19 @@ function hideAddAthleteForm() {
   document.getElementById("newAthleteCoach").value = "";
 }
 
+function showSessionSaveMessage(message) {
+  const msg = document.getElementById("sessionSaveMessage");
+  if (!msg) return;
+
+  msg.textContent = message;
+  msg.style.display = "block";
+
+  setTimeout(() => {
+    msg.style.display = "none";
+    msg.textContent = "";
+  }, 2000);
+}
+
 // -----------------------------
 // LEVEL DROPDOWN OPTIONS
 // -----------------------------
@@ -823,6 +836,7 @@ async function saveSession() {
   const wasEditing = !!editingSessionId;
 
   editingSessionId = null;
+  showSessionSaveMessage(wasEditing ? "Session updated" : "Session saved");
   document.getElementById("cancelEditBtn").style.display = "none";
 
   await openAthleteProfile(selectedAthleteIndex);
