@@ -567,16 +567,14 @@ div.onclick = async () => {
     actualIndex = athletes.length - 1;
   }
 
-  await openAthleteProfile(actualIndex);
-
-  // Clear search box and results for next athlete
+  // Clear search box and results first
   const searchBox = document.getElementById("athleteSearch");
   const resultsDiv = document.getElementById("searchResults");
 
   searchBox.value = "";
   resultsDiv.innerHTML = "";
 
-  
+  await openAthleteProfile(actualIndex);
 };
 
     resultsDiv.appendChild(div);
