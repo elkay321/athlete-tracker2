@@ -466,6 +466,105 @@ function hideAddAthleteForm() {
   document.getElementById("newAthleteCoach").value = "";
 }
 
+function showSessionSaveMessage(message) {
+  const msg = document.getElementById("sessionSaveMessage");
+  if (!msg) return;
+
+  msg.textContent = message;
+  msg.style.display = "block";
+
+  setTimeout(() => {
+    msg.style.display = "none";
+    msg.textContent = "";
+  }, 2000);
+}
+
+function scrollToSessionForm() {
+  const target =
+    document.getElementById("sessionDate") ||
+    document.getElementById("sessionFormTitle");
+
+  if (target) {
+    target.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  }
+}
+
+function resetSessionForm() {
+  const sessionDate = document.getElementById("sessionDate");
+  const exerciseName = document.getElementById("exerciseName");
+  const weight = document.getElementById("weight");
+  const metricValueNumber = document.getElementById("metricValueNumber");
+  const metricValueSelect = document.getElementById("metricValueSelect");
+  const primaryMetricWrapper = document.getElementById("primaryMetricWrapper");
+  const reps = document.getElementById("reps");
+  const sets = document.getElementById("sets");
+  const repsFieldWrapper = document.getElementById("repsFieldWrapper");
+  const setsFieldWrapper = document.getElementById("setsFieldWrapper");
+  const sessionNotes = document.getElementById("sessionNotes");
+
+  if (sessionDate) {
+    sessionDate.value = new Date().toISOString().split("T")[0];
+  }
+
+  if (exerciseName) {
+    exerciseName.value = "";
+  }
+
+  if (weight) {
+    weight.innerHTML = `<option value="">Weight</option>`;
+    weight.style.display = "none";
+  }
+
+  if (metricValueNumber) {
+    metricValueNumber.value = "";
+    metricValueNumber.style.display = "none";
+  }
+
+  if (metricValueSelect) {
+    metricValueSelect.innerHTML = `<option value="">Select option</option>`;
+    metricValueSelect.style.display = "none";
+  }
+
+  if (primaryMetricWrapper) {
+    primaryMetricWrapper.classList.add("field-hidden");
+  }
+
+  if (reps) {
+    reps.value = "";
+  }
+
+  if (sets) {
+    sets.value = "";
+  }
+
+  if (repsFieldWrapper) {
+    repsFieldWrapper.classList.add("field-hidden");
+  }
+
+  if (setsFieldWrapper) {
+    setsFieldWrapper.classList.add("field-hidden");
+  }
+
+  if (sessionNotes) {
+    sessionNotes.value = "";
+  }
+}
+
+function setSessionFormTitle() {
+  if (selectedAthleteIndex === null || !athletes[selectedAthleteIndex]) return;
+
+  const titleEl = document.getElementById("sessionFormTitle");
+  if (!titleEl) return;
+
+  const athlete = athletes[selectedAthleteIndex];
+  titleEl.textContent = editingSessionId
+    ? `Editing Session for ${athlete.name}`
+    : `Add New Session for ${athlete.name}`;
+}
+
 // -----------------------------
 // LEVEL DROPDOWN OPTIONS
 // -----------------------------
