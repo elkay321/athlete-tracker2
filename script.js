@@ -1,3 +1,5 @@
+script - good
+
 // -----------------------------
 // SUPABASE CONNECTION
 // -----------------------------
@@ -466,71 +468,6 @@ function hideAddAthleteForm() {
   document.getElementById("newAthleteCoach").value = "";
 }
 
-function showSessionSaveMessage(message) {
-  const msg = document.getElementById("sessionSaveMessage");
-  if (!msg) return;
-
-  msg.textContent = message;
-  msg.style.display = "block";
-
-  setTimeout(() => {
-    msg.style.display = "none";
-    msg.textContent = "";
-  }, 2000);
-}
-
-function scrollToSessionForm() {
-  const target =
-    document.getElementById("sessionDate") ||
-    document.getElementById("sessionFormTitle");
-
-  if (target) {
-    target.scrollIntoView({
-      behavior: "smooth",
-      block: "start"
-    });
-
-    // helps the user visually land in the form
-    if (typeof target.focus === "function") {
-      setTimeout(() => target.focus(), 250);
-    }
-  }
-}
-
-function resetSessionForm() {
-  document.getElementById("sessionDate").value = new Date().toISOString().split("T")[0];
-  document.getElementById("exerciseName").value = "";
-
-  document.getElementById("weight").innerHTML = `<option value="">Weight</option>`;
-  document.getElementById("weight").style.display = "none";
-
-  document.getElementById("metricValueNumber").value = "";
-  document.getElementById("metricValueNumber").style.display = "none";
-
-  document.getElementById("metricValueSelect").innerHTML = `<option value="">Select option</option>`;
-  document.getElementById("metricValueSelect").style.display = "none";
-
-  document.getElementById("primaryMetricWrapper").classList.add("field-hidden");
-
-  document.getElementById("reps").value = "";
-  document.getElementById("sets").value = "";
-  document.getElementById("repsFieldWrapper").classList.add("field-hidden");
-  document.getElementById("setsFieldWrapper").classList.add("field-hidden");
-
-  document.getElementById("sessionNotes").value = "";
-}
-
-function setSessionFormTitle() {
-  if (selectedAthleteIndex === null || !athletes[selectedAthleteIndex]) return;
-
-  const athlete = athletes[selectedAthleteIndex];
-  const title = editingSessionId
-    ? `Editing Session for ${athlete.name}`
-    : `Add New Session for ${athlete.name}`;
-
-  document.getElementById("sessionFormTitle").textContent = title;
-}
-
 // -----------------------------
 // LEVEL DROPDOWN OPTIONS
 // -----------------------------
@@ -648,12 +585,7 @@ div.onclick = async () => {
 
 // ATHLETE PROFILE //
 
-async function openAthleteProfile(index, options = {}) {
-  const {
-    preserveForm = false,
-    scrollToSessionSection = true
-  } = options;
-
+async function openAthleteProfile(index) {
   selectedAthleteIndex = index;
   const athlete = athletes[index];
 
@@ -666,33 +598,44 @@ async function openAthleteProfile(index, options = {}) {
   document.getElementById("profileMeta").textContent =
     `Program/Class: ${athlete.program || "Not entered"} | Coach: ${athlete.coach || "Not entered"}`;
 
+  document.getElementById("sessionFormTitle").textContent = `Add New Session for ${athlete.name}`;
+
   document.getElementById("athleteTriggers").value = athlete.triggers || "";
   document.getElementById("athletePreferences").value = athlete.preferences || "";
   document.getElementById("athleteCommunicationStyle").value = athlete.communication_style || "";
 
   renderLastSession();
   renderHistory();
-  setSessionFormTitle();
 
-  if (!preserveForm) {
-    editingSessionId = null;
-    document.getElementById("cancelEditBtn").style.display = "none";
-    resetSessionForm();
-  }
+  const today = new Date().toISOString().split("T")[0];
+  document.getElementById("sessionDate").value = today;
+  document.getElementById("exerciseName").value = "";
 
-  if (scrollToSessionSection) {
-    const target =
-      document.getElementById("sessionFormTitle") ||
-      document.getElementById("sessionDate") ||
-      document.getElementById("athleteProfileSection");
+  // Reset primary metric area
+  document.getElementById("weight").innerHTML = `<option value="">Weight</option>`;
+  document.getElementById("weight").style.display = "none";
 
-    if (target) {
-      target.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
-    }
-  }
+  document.getElementById("metricValueNumber").value = "";
+  document.getElementById("metricValueNumber").style.display = "none";
+
+  document.getElementById("metricValueSelect").innerHTML = `<option value="">Select option</option>`;
+  document.getElementById("metricValueSelect").style.display = "none";
+
+  document.getElementById("primaryMetricWrapper").classList.add("field-hidden");
+
+  // Reset reps / sets
+  document.getElementById("reps").value = "";
+  document.getElementById("sets").value = "";
+  document.getElementById("repsFieldWrapper").classList.add("field-hidden");
+  document.getElementById("setsFieldWrapper").classList.add("field-hidden");
+
+  // Reset remaining fields
+  document.getElementById("sessionNotes").value = "";
+
+  document.getElementById("athleteSupportProfileCard").scrollIntoView({
+  behavior: "smooth",
+  block: "start"
+});
 }
 
 function renderLastSession() {
@@ -814,6 +757,7 @@ async function saveSession() {
   const exerciseSelect = document.getElementById("exerciseName");
   const selectedExerciseOption = exerciseSelect.options[exerciseSelect.selectedIndex];
 
+  const exerciseId = exerciseSelect.value;
   const metricType = selectedExerciseOption?.dataset?.metricType || "";
   const exercise = selectedExerciseOption?.dataset?.exerciseName || "";
 
@@ -825,15 +769,11 @@ async function saveSession() {
 
   if (metricType === "weight") {
     primaryMetricValue = document.getElementById("weight").value || null;
-  } else if (
-    metricType === "seconds" ||
-    metricType === "minutes" ||
-    metricType === "percent"
-  ) {
+  } else if (metricType === "seconds" || metricType === "minutes" || metricType === "percent") {
     primaryMetricValue = document.getElementById("metricValueNumber").value || null;
   } else if (metricType === "level") {
-    primaryMetricValue = document.getElementById("metricValueSelect").value || null;
-  }
+  primaryMetricValue = document.getElementById("metricValueSelect").value || null;
+}
 
   if (exercise === "") return;
 
@@ -887,18 +827,44 @@ async function saveSession() {
   editingSessionId = null;
   document.getElementById("cancelEditBtn").style.display = "none";
 
-  await openAthleteProfile(selectedAthleteIndex, {
-    preserveForm: false,
-    scrollToTopCard: false
-  });
+  await openAthleteProfile(selectedAthleteIndex);
 
-  showSessionSaveMessage(
-    wasEditing ? "Session updated successfully." : "Session saved successfully."
-  );
+  document.getElementById("sessionFormTitle").textContent =
+    `Add New Session for ${athletes[selectedAthleteIndex].name}`;
 
-  setSessionFormTitle();
-  resetSessionForm();
-  scrollToSessionForm();
+  // Clear form fields
+ document.getElementById("exerciseName").value = "";
+
+document.getElementById("weight").innerHTML = `<option value="">Weight</option>`;
+document.getElementById("weight").style.display = "none";
+
+document.getElementById("metricValueNumber").value = "";
+document.getElementById("metricValueNumber").style.display = "none";
+
+document.getElementById("metricValueSelect").innerHTML = `<option value="">Select option</option>`;
+document.getElementById("metricValueSelect").style.display = "none";
+
+document.getElementById("primaryMetricWrapper").classList.add("field-hidden");
+
+document.getElementById("reps").value = "";
+document.getElementById("sets").value = "";
+document.getElementById("repsFieldWrapper").classList.add("field-hidden");
+document.getElementById("setsFieldWrapper").classList.add("field-hidden");
+
+document.getElementById("sessionNotes").value = "";
+
+  // Keep user near the relevant section
+  if (wasEditing) {
+    document.getElementById("historyTable").scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  } else {
+    document.getElementById("sessionFormTitle").scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  }
 }
 
 // Trigger section
@@ -1050,12 +1016,13 @@ async function deleteSession(sessionId) {
 //EDIT
 
 async function editSession(sessionId) {
-  const session = selectedAthleteSessions.find((s) => s.id === sessionId);
+  const session = selectedAthleteSessions.find(s => s.id === sessionId);
   if (!session) return;
 
   editingSessionId = session.id;
 
   document.getElementById("cancelEditBtn").style.display = "inline-block";
+
   document.getElementById("sessionDate").value = session.session_date || "";
 
   const exerciseSelect = document.getElementById("exerciseName");
@@ -1072,74 +1039,44 @@ async function editSession(sessionId) {
   exerciseSelect.value = matchedExerciseId;
 
   await configureMetricField(
-    matchedMetricType,
-    matchedExerciseId,
-    session.exercise,
-    session.primary_metric_value || session.weight || ""
-  );
+  matchedMetricType,
+  matchedExerciseId,
+  session.exercise,
+  session.primary_metric_value || session.weight || ""
+);
 
-  document.getElementById("reps").value = session.reps ?? "";
-  document.getElementById("sets").value = session.sets ?? "";
+  document.getElementById("reps").value = session.reps || "";
+  document.getElementById("sets").value = session.sets || "";
   document.getElementById("sessionNotes").value = session.notes || "";
 
-  setSessionFormTitle();
+  document.getElementById("sessionFormTitle").textContent =
+    `Editing Session for ${athletes[selectedAthleteIndex].name}`;
 
-  await loadLastExerciseSession(session.exercise);
-
-  setTimeout(() => {
-    scrollToSessionForm();
-  }, 100);
+  document.getElementById("sessionFormTitle").scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
 }
 
 // Cancel edit functionality
 function cancelEdit() {
+
   editingSessionId = null;
+
+  document.getElementById("sessionFormTitle").textContent =
+    `Add New Session for ${athletes[selectedAthleteIndex].name}`;
+
+  document.getElementById("exerciseName").value = "";
+  document.getElementById("weight").value = "";
+  document.getElementById("reps").value = "";
+  document.getElementById("sets").value = "";
+  document.getElementById("sessionNotes").value = "";
+
   document.getElementById("cancelEditBtn").style.display = "none";
 
-  setSessionFormTitle();
-  resetSessionForm();
-  scrollToSessionForm();
+  document.getElementById("sessionFormTitle").scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
