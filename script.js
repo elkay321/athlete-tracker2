@@ -917,7 +917,6 @@ async function exportCSV() {
           wrapCSV(session.weight),
           wrapCSV(session.reps),
           wrapCSV(session.sets),
-          wrapCSV(session.assist_level),
           wrapCSV(session.notes)
         ].join(",") + "\n";
       });
@@ -1036,7 +1035,6 @@ async function editSession(sessionId) {
 
   document.getElementById("reps").value = session.reps || "";
   document.getElementById("sets").value = session.sets || "";
-  document.getElementById("assistLevel").value = session.assist_level || "";
   document.getElementById("sessionNotes").value = session.notes || "";
 
   document.getElementById("sessionFormTitle").textContent =
@@ -1069,6 +1067,7 @@ function cancelEdit() {
     block: "start"
   });
 }
+
 
 
 
