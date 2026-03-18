@@ -651,7 +651,7 @@ div.onclick = async () => {
 async function openAthleteProfile(index, options = {}) {
   const {
     preserveForm = false,
-    scrollToTopCard = true
+    scrollToSessionSection = true
   } = options;
 
   selectedAthleteIndex = index;
@@ -680,11 +680,18 @@ async function openAthleteProfile(index, options = {}) {
     resetSessionForm();
   }
 
-  if (scrollToTopCard) {
-    document.getElementById("athleteSupportProfileCard").scrollIntoView({
-      behavior: "smooth",
-      block: "start"
-    });
+  if (scrollToSessionSection) {
+    const target =
+      document.getElementById("sessionFormTitle") ||
+      document.getElementById("sessionDate") ||
+      document.getElementById("athleteProfileSection");
+
+    if (target) {
+      target.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
   }
 }
 
